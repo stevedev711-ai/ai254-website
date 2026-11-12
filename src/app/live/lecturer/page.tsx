@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { CreateSessionForm } from "@/components/live/CreateSessionForm";
+import { InstallApp } from "@/components/live/InstallApp";
 import { liveServicesConfigured } from "@/lib/live/services";
 
 export const metadata = { title: "Lecturer", robots: { index: false } };
@@ -23,6 +24,9 @@ export default async function LecturerDashboard() {
     <main className="mx-auto max-w-6xl px-4 py-10 sm:px-6">
       <p className="eyebrow">Lecturer</p>
       <h1 className="mt-1 text-3xl font-bold">Welcome, {user.name}</h1>
+      <div className="mt-6 [&>div]:mx-0">
+        <InstallApp compact />
+      </div>
 
       <div className="mt-8 grid gap-8 lg:grid-cols-[1.1fr_1fr]">
         <section className="card p-6 sm:p-8" aria-labelledby="create-h">

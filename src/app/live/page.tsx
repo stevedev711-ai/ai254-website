@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { InstallApp } from "@/components/live/InstallApp";
 import { liveServicesConfigured } from "@/lib/live/services";
 
 export const dynamic = "force-dynamic";
@@ -39,7 +40,11 @@ export default function LiveLanding() {
           </Link>
         </div>
 
-        <p className="mt-10 text-sm text-slate-500">
+        <div className="mt-10">
+          <InstallApp />
+        </div>
+
+        <p className="mt-8 text-sm text-slate-500">
           <Link href="/live/login?role=admin" className="font-medium text-slate-600 underline hover:text-navy-600">Administrator login</Link>
         </p>
       </div>
