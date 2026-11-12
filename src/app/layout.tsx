@@ -18,7 +18,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "AI254 LIVE", statusBarStyle: "default" },
 };
 
-export const viewport: Viewport = { themeColor: "#264AA0", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = { themeColor: "#0C1834", width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

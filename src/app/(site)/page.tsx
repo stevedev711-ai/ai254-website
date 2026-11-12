@@ -18,7 +18,7 @@ export default function HomePage() {
     <>
       {/* HERO */}
       <section className="relative overflow-hidden">
-        <div className="absolute inset-x-0 top-0 -z-10 h-[620px] bg-[radial-gradient(ellipse_at_top_right,#E8F6FD_0%,transparent_60%)]" aria-hidden />
+        <div className="absolute inset-x-0 top-0 -z-10 h-[620px] bg-[radial-gradient(ellipse_at_top_right,rgba(4,160,225,0.16)_0%,transparent_60%)]" aria-hidden />
         <div className="container-x grid items-center gap-14 pb-20 pt-12 sm:pt-16 lg:grid-cols-[1.05fr_1fr] lg:pb-28 lg:pt-20">
           <div>
             <p className="eyebrow">Real-time Kiswahili lecture support</p>
@@ -32,7 +32,7 @@ export default function HomePage() {
               <Link href="/our-technology" className="btn-primary">Explore Our Technology</Link>
               <Link href="/request-a-demo" className="btn-outline">Request a Demo</Link>
             </div>
-            <Link href="/live" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-700 hover:text-cyan-800">
+            <Link href="/live" className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 hover:text-cyan-300">
               <span className="h-2 w-2 rounded-full bg-cyan-500 animate-pulseDot" aria-hidden />
               Open AI254 LIVE <span aria-hidden>→</span>
             </Link>
@@ -68,7 +68,7 @@ export default function HomePage() {
             <p>
               AI254 is working on this problem by combining speech recognition, live translation and carefully developed Kiswahili scientific terminology. Our initial work focuses on Biology, where we are building the language resources needed to translate scientific explanations while preserving their academic meaning.
             </p>
-            <p className="rounded-xl border-l-4 border-cyan-500 bg-cyan-50/60 px-5 py-4 text-[15px] text-slate-700">
+            <p className="rounded-xl border-l-4 border-cyan-500 bg-cyan-400/10 px-5 py-4 text-[15px] text-slate-700">
               AI254 supports English-medium teaching rather than replacing it. Students keep the lecturer&apos;s original English explanation on screen and use the Kiswahili text where it helps.
             </p>
           </div>
@@ -76,7 +76,7 @@ export default function HomePage() {
       </section>
 
       {/* PILOTS */}
-      <section className="section bg-navy-900 text-white">
+      <section className="section border-y border-white/10 bg-[#081128] text-white">
         <div className="container-x">
           <div className="grid gap-12 lg:grid-cols-[1fr_1.3fr]">
             <div>
@@ -168,12 +168,12 @@ export default function HomePage() {
 
 function Fact({ value, label, note }: { value: string; label: string; note?: string }) {
   return (
-    <div className="bg-navy-900/60 p-6 sm:p-8">
+    <div className="bg-[#081128] p-6 sm:p-8">
       <dt className="sr-only">{label}</dt>
       <dd>
         <p className="font-display text-4xl font-extrabold text-white sm:text-5xl">{value}</p>
         <p className="mt-2 text-sm font-medium text-navy-100">{label}</p>
-        {note && <p className="mt-2 text-xs leading-relaxed text-navy-300">{note}</p>}
+        {note && <p className="mt-2 text-xs leading-relaxed text-navy-200">{note}</p>}
       </dd>
     </div>
   );
@@ -182,7 +182,7 @@ function Fact({ value, label, note }: { value: string; label: string; note?: str
 function UseCase({ tag, title, body, points }: { tag: string; title: string; body: string; points: string[] }) {
   return (
     <article className="card flex flex-col p-7">
-      <span className="badge w-fit bg-navy-50 text-navy-600">{tag}</span>
+      <span className="badge w-fit bg-navy-400/15 text-cyan-300">{tag}</span>
       <h3 className="mt-4 text-xl font-bold">{title}</h3>
       <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{body}</p>
       <ul className="mt-5 space-y-2 border-t border-slate-100 pt-5 text-sm text-slate-700">

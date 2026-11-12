@@ -33,9 +33,9 @@ export function ContactForm() {
 
   if (state.kind === "success")
     return (
-      <div role="status" className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8">
-        <h2 className="text-xl font-bold text-emerald-900">Message received</h2>
-        <p className="mt-2 text-emerald-900/90">{state.message}</p>
+      <div role="status" className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-8">
+        <h2 className="text-xl font-bold text-emerald-300">Message received</h2>
+        <p className="mt-2 text-emerald-300">{state.message}</p>
         <button type="button" className="btn-outline mt-5" onClick={reset}>Send another message</button>
       </div>
     );
@@ -45,7 +45,7 @@ export function ContactForm() {
     <form ref={formRef} onSubmit={onSubmit} noValidate className="relative space-y-5" aria-busy={submitting}>
       <Honeypot />
       {state.kind === "error" && (
-        <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+        <div role="alert" className="rounded-xl border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-300">
           <strong>Your message was not sent.</strong> {state.message}
         </div>
       )}

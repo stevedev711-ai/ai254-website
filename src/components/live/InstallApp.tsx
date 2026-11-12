@@ -63,11 +63,11 @@ export function InstallApp({ compact = false }: { compact?: boolean }) {
     setDeferred(null);
   }
 
-  if (installed) return <p role="status" className="mx-auto max-w-xl rounded-xl bg-emerald-50 px-4 py-3 text-sm text-emerald-800">AI254 LIVE is installed. Open it from your home screen or app list.</p>;
+  if (installed) return <p role="status" className="mx-auto max-w-xl rounded-xl bg-emerald-400/10 px-4 py-3 text-sm text-emerald-300">AI254 LIVE is installed. Open it from your home screen or app list.</p>;
   if (hidden) return null;
 
   return (
-    <div className={`mx-auto flex max-w-xl flex-col gap-3 rounded-2xl border border-navy-100 bg-white p-4 text-left shadow-sm ${compact ? "" : "sm:p-5"}`}>
+    <div className={`mx-auto flex max-w-xl flex-col gap-3 rounded-2xl border border-navy-400/30 bg-surface p-4 text-left shadow-sm ${compact ? "" : "sm:p-5"}`}>
       <div className="flex flex-wrap items-center gap-x-4 gap-y-3">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/icons/icon-192.png" alt="" className="h-12 w-12 shrink-0 rounded-xl ring-1 ring-slate-200" />

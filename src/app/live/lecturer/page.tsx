@@ -43,7 +43,7 @@ export default async function LecturerDashboard() {
             <ul className="mt-4 space-y-2.5">
               {sessions.map((s) => (
                 <li key={s.id}>
-                  <Link href={`/live/lecturer/${s.id}`} className="card flex items-center gap-4 p-4 hover:border-navy-300">
+                  <Link href={`/live/lecturer/${s.id}`} className="card flex items-center gap-4 p-4 hover:border-navy-400/60">
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-semibold">{s.title}</p>
                       <p className="text-xs text-slate-500">

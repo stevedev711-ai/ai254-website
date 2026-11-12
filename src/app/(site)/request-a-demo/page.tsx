@@ -12,7 +12,7 @@ export default async function RequestDemoPage({ searchParams }: { searchParams: 
   const { interest } = await searchParams;
   return (
     <section className="relative">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top_right,#E8F6FD_0%,transparent_55%)]" aria-hidden />
+      <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top_right,rgba(4,160,225,0.16)_0%,transparent_55%)]" aria-hidden />
       <div className="container-x grid gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_1.5fr]">
         <div>
           <p className="eyebrow">Request a Demo</p>
@@ -36,8 +36,8 @@ export default async function RequestDemoPage({ searchParams }: { searchParams: 
               ))}
             </ul>
             <p className="text-sm text-slate-500">
-              Prefer email? Write to <a className="font-medium text-navy-600 underline" href={`mailto:${site.email}`}>{site.email}</a> or call{" "}
-              <a className="font-medium text-navy-600 underline" href={site.phoneHref}>{site.phone}</a>.
+              Prefer email? Write to <a className="font-medium text-cyan-300 underline" href={`mailto:${site.email}`}>{site.email}</a> or call{" "}
+              <a className="font-medium text-cyan-300 underline" href={site.phoneHref}>{site.phone}</a>.
             </p>
           </div>
         </div>

@@ -22,8 +22,8 @@ export function Header() {
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname.startsWith(href));
 
   return (
-    <header className={`sticky top-0 z-50 border-b bg-white/90 backdrop-blur transition-shadow ${scrolled ? "border-slate-200 shadow-sm" : "border-transparent"}`}>
-      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:rounded focus:bg-white focus:px-3 focus:py-2">
+    <header className={`sticky top-0 z-50 border-b bg-page/90 backdrop-blur transition-shadow ${scrolled ? "border-slate-200 shadow-sm" : "border-transparent"}`}>
+      <a href="#main" className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-3 focus:rounded focus:bg-surface focus:px-3 focus:py-2">
         Skip to content
       </a>
       <div className="container-x flex h-16 items-center justify-between gap-4 lg:h-[72px]">
@@ -67,7 +67,7 @@ export function Header() {
       </div>
 
       {open && (
-        <nav id="mobile-nav" aria-label="Mobile" className="border-t border-slate-200 bg-white lg:hidden">
+        <nav id="mobile-nav" aria-label="Mobile" className="border-t border-slate-200 bg-surface lg:hidden">
           <ul className="container-x grid gap-2 py-4">
             {nav.map((item) => (
               <li key={item.href}>

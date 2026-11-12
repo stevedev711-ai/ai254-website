@@ -61,7 +61,7 @@ export default function WhatWeDoPage() {
           <ul className="sticky top-28 space-y-1 border-l border-slate-200 text-sm">
             {sections.map((s) => (
               <li key={s.id}>
-                <a href={`#${s.id}`} className="-ml-px block border-l border-transparent py-1.5 pl-4 text-slate-600 hover:border-navy-500 hover:text-navy-600">
+                <a href={`#${s.id}`} className="-ml-px block border-l border-transparent py-1.5 pl-4 text-slate-600 hover:border-navy-500 hover:text-cyan-300">
                   {s.label}
                 </a>
               </li>
@@ -107,8 +107,8 @@ export default function WhatWeDoPage() {
                 <div key={e.en} className="border-t border-slate-200 first:border-0 sm:first:border-t">
                   <div className="grid gap-1 p-4 sm:grid-cols-[1fr_1fr_1fr] sm:gap-0 sm:p-0">
                     <p className="font-semibold sm:p-4">{e.en}</p>
-                    <p className="text-red-700 line-through decoration-red-300 sm:p-4" lang="sw">{e.wrong}</p>
-                    <p className="font-semibold text-emerald-700 sm:p-4" lang="sw">{e.right}</p>
+                    <p className="text-red-300 line-through decoration-red-300 sm:p-4" lang="sw">{e.wrong}</p>
+                    <p className="font-semibold text-emerald-300 sm:p-4" lang="sw">{e.right}</p>
                   </div>
                   <p className="px-4 pb-4 text-sm text-slate-600">{e.note}</p>
                 </div>
@@ -125,7 +125,7 @@ export default function WhatWeDoPage() {
               <Iface t="Administrator interface" b="Authorised staff manage lecturer accounts, monitor sessions, review system logs and errors, maintain terminology resources and handle demonstration requests." />
             </div>
             <p>
-              <Link href="/live" className="font-semibold text-navy-600 underline decoration-cyan-400 underline-offset-4">Open AI254 LIVE</Link> to try the student and lecturer experience in demonstration mode.
+              <Link href="/live" className="font-semibold text-cyan-300 underline decoration-cyan-400 underline-offset-4">Open AI254 LIVE</Link> to try the student and lecturer experience in demonstration mode.
             </p>
           </Block>
 
@@ -138,9 +138,9 @@ export default function WhatWeDoPage() {
               <Challenge t="System logs" b="Processing times, recognition and translation errors, and connection behaviour during sessions." />
             </ul>
             <p>Findings go straight back into development, especially work on technical vocabulary, translation delay and readability on mobile.</p>
-            <div className="rounded-2xl border-l-4 border-amber-400 bg-amber-50 p-6">
-              <p className="font-semibold text-amber-900">AI254 is an evolving technology</p>
-              <p className="mt-2 mb-0 text-amber-900/90">
+            <div className="rounded-2xl border-l-4 border-amber-400 bg-amber-400/10 p-6">
+              <p className="font-semibold text-amber-200">AI254 is an evolving technology</p>
+              <p className="mt-2 mb-0 text-amber-200">
                 AI254 LIVE is still under active development and has been tested in early-stage pilots only. Wider deployment across courses or institutions will need further testing, evaluation in other teaching environments, and expanded terminology resources.
               </p>
             </div>
@@ -156,7 +156,7 @@ export default function WhatWeDoPage() {
 function Block({ id, n, title, children }: { id: string; n: string; title: string; children: React.ReactNode }) {
   return (
     <section id={id} className="scroll-mt-28">
-      <span className="font-mono text-sm font-semibold text-cyan-600">{n}</span>
+      <span className="font-mono text-sm font-semibold text-cyan-300">{n}</span>
       <h2 className="mt-2 text-3xl font-bold">{title}</h2>
       <div className="prose-body mt-6 space-y-5 text-[17px] [&_p]:mb-0">{children}</div>
     </section>
@@ -165,7 +165,7 @@ function Block({ id, n, title, children }: { id: string; n: string; title: strin
 
 function Challenge({ t, b }: { t: string; b: string }) {
   return (
-    <li className="list-none rounded-xl border border-slate-200 bg-white p-5">
+    <li className="list-none rounded-xl border border-slate-200 bg-surface p-5">
       <p className="font-semibold text-brand-ink">{t}</p>
       <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{b}</p>
     </li>

@@ -36,7 +36,7 @@ export function LoginForm({ role, next }: { role: "admin" | "lecturer"; next?: s
 
   return (
     <form onSubmit={onSubmit} className="mt-6 space-y-4">
-      {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+      {error && <p role="alert" className="rounded-lg bg-red-400/10 p-3 text-sm text-red-300">{error}</p>}
       <div>
         <label htmlFor="email" className="label">Email</label>
         <input id="email" name="email" type="email" required autoComplete="username" className="input" />

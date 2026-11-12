@@ -12,7 +12,7 @@ export function Field({ id, label, required, error, hint, children, className = 
     <div className={className}>
       <label htmlFor={id} className="label">
         {label}
-        {required ? <span className="ml-0.5 text-red-600" aria-hidden> *</span> : <span className="ml-1.5 text-xs font-normal text-slate-400">Optional</span>}
+        {required ? <span className="ml-0.5 text-red-300" aria-hidden> *</span> : <span className="ml-1.5 text-xs font-normal text-slate-400">Optional</span>}
       </label>
       {control}
       {hint && <p id={`${id}-hint`} className="mt-1.5 text-xs text-slate-500">{hint}</p>}

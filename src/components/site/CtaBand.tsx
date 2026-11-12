@@ -14,7 +14,7 @@ export function CtaBand({ title, body, primary = { href: "/request-a-demo", labe
           <h2 className="relative mx-auto max-w-2xl text-3xl font-bold text-white sm:text-4xl">{title}</h2>
           <p className="relative mx-auto mt-4 max-w-2xl text-lg leading-relaxed text-white/90">{body}</p>
           <div className="relative mt-8 flex flex-wrap justify-center gap-3">
-            <Link href={primary.href} className="btn bg-white text-navy-600 hover:bg-navy-50">{primary.label}</Link>
+            <Link href={primary.href} className="btn bg-surface text-cyan-300 hover:bg-navy-400/15">{primary.label}</Link>
             {secondary && <Link href={secondary.href} className="btn border border-white/50 text-white hover:bg-white/10">{secondary.label}</Link>}
           </div>
         </div>

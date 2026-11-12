@@ -49,7 +49,7 @@ export function HeroDemo() {
 
   return (
     <figure className="relative" aria-label="Illustration of AI254 LIVE during a Biology 101 lecture">
-      <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-navy-50 via-white to-cyan-50" aria-hidden />
+      <div className="absolute -inset-6 -z-10 rounded-[2rem] bg-gradient-to-br from-navy-800/40 via-page to-cyan-900/30" aria-hidden />
 
       <div className="grid items-end gap-4 sm:grid-cols-[1fr_auto]">
         {/* Lecturer console */}
@@ -78,14 +78,14 @@ export function HeroDemo() {
               <span aria-hidden>→</span>
               <span className="rounded bg-slate-100 px-2 py-1">Speech-to-text</span>
               <span aria-hidden>→</span>
-              <span className={`rounded px-2 py-1 ${done ? "bg-cyan-50 text-cyan-700" : "bg-slate-100"}`}>Kiswahili translation</span>
+              <span className={`rounded px-2 py-1 ${done ? "bg-cyan-400/10 text-cyan-300" : "bg-slate-100"}`}>Kiswahili translation</span>
             </div>
           </div>
         </div>
 
         {/* Student phone */}
-        <div className="mx-auto w-[270px] rounded-[2.2rem] border-[7px] border-brand-ink bg-brand-ink shadow-2xl shadow-navy-900/20 sm:mx-0">
-          <div className="overflow-hidden rounded-[1.7rem] bg-white">
+        <div className="mx-auto w-[270px] rounded-[2.2rem] border-[7px] border-bezel bg-bezel shadow-2xl shadow-navy-900/20 sm:mx-0">
+          <div className="overflow-hidden rounded-[1.7rem] bg-surface">
             <div className="flex items-center justify-between bg-navy-500 px-4 pb-2.5 pt-4 text-white">
               <div>
                 <p className="text-[10px] font-medium uppercase tracking-wider text-cyan-200">AI254 LIVE</p>
@@ -95,15 +95,15 @@ export function HeroDemo() {
             </div>
             <div className="h-[330px] space-y-2.5 overflow-hidden bg-slate-50 p-3">
               {history.map((h, k) => (
-                <div key={k} className="rounded-xl bg-white p-2.5 opacity-60 ring-1 ring-slate-200">
+                <div key={k} className="rounded-xl bg-surface p-2.5 opacity-60 ring-1 ring-slate-200">
                   <p className="text-[11px] leading-snug text-slate-500">{h.en}</p>
-                  <p className="mt-1 text-[12px] font-medium leading-snug text-navy-600">{h.sw}</p>
+                  <p className="mt-1 text-[12px] font-medium leading-snug text-cyan-300">{h.sw}</p>
                 </div>
               ))}
-              <div className="rounded-xl bg-white p-2.5 ring-2 ring-cyan-400">
+              <div className="rounded-xl bg-surface p-2.5 ring-2 ring-cyan-400">
                 <p className="text-[11px] leading-snug text-slate-600">{current.en.slice(0, typed)}</p>
                 {done ? (
-                  <p key={i} className="mt-1 animate-fadeUp text-[13px] font-semibold leading-snug text-navy-600" lang="sw">
+                  <p key={i} className="mt-1 animate-fadeUp text-[13px] font-semibold leading-snug text-cyan-300" lang="sw">
                     {current.sw}
                   </p>
                 ) : (
@@ -115,10 +115,10 @@ export function HeroDemo() {
                 )}
               </div>
               {done && term && (
-                <div key={`t${i}`} className="animate-fadeUp rounded-xl border border-cyan-200 bg-cyan-50 p-2.5">
-                  <p className="text-[10px] font-semibold uppercase tracking-wider text-cyan-700">Istilahi · Term</p>
+                <div key={`t${i}`} className="animate-fadeUp rounded-xl border border-cyan-400/40 bg-cyan-400/10 p-2.5">
+                  <p className="text-[10px] font-semibold uppercase tracking-wider text-cyan-300">Istilahi · Term</p>
                   <p className="text-[12px] font-semibold text-brand-ink">
-                    {term.english} → <span className="text-navy-600">{term.kiswahili}</span>
+                    {term.english} → <span className="text-cyan-300">{term.kiswahili}</span>
                   </p>
                   <p className="mt-0.5 text-[11px] leading-snug text-slate-600" lang="sw">{term.definitionSw}</p>
                 </div>

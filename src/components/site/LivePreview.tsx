@@ -29,7 +29,7 @@ export function LivePreview() {
             aria-selected={tab === t.id}
             aria-controls={`panel-${t.id}`}
             onClick={() => setTab(t.id)}
-            className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? "bg-white text-navy-600 shadow-sm ring-1 ring-slate-200" : "text-slate-600 hover:text-brand-ink"}`}
+            className={`whitespace-nowrap rounded-lg px-4 py-2 text-sm font-medium transition-colors ${tab === t.id ? "bg-surface text-cyan-300 shadow-sm ring-1 ring-slate-200" : "text-slate-600 hover:text-brand-ink"}`}
           >
             {t.label}
           </button>
@@ -37,7 +37,7 @@ export function LivePreview() {
         <span className="demo-badge ml-auto hidden shrink-0 self-center sm:inline-flex">Preview · sample content</span>
       </div>
 
-      <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="min-h-[420px] bg-white p-5 sm:p-8">
+      <div role="tabpanel" id={`panel-${tab}`} aria-labelledby={`tab-${tab}`} className="min-h-[420px] bg-surface p-5 sm:p-8">
         {tab === "join" && <JoinPanel />}
         {tab === "student" && <StudentPanel />}
         {tab === "lecturer" && <LecturerPanel />}
@@ -59,11 +59,11 @@ function JoinPanel() {
           <p className="label">Active lectures</p>
           <ul className="space-y-2">
             {DEMO_SCRIPTS.slice(0, 3).map((s, k) => (
-              <li key={s.id} className={`flex items-center justify-between rounded-lg border px-3.5 py-3 text-sm ${k === 0 ? "border-cyan-400 bg-cyan-50" : "border-slate-200"}`}>
+              <li key={s.id} className={`flex items-center justify-between rounded-lg border px-3.5 py-3 text-sm ${k === 0 ? "border-cyan-400 bg-cyan-400/10" : "border-slate-200"}`}>
                 <span>
                   <span className="font-semibold">{s.courseCode}</span> <span className="text-slate-600">· {s.subject}</span>
                 </span>
-                <span className="text-xs text-emerald-700">● Live</span>
+                <span className="text-xs text-emerald-300">● Live</span>
               </li>
             ))}
           </ul>
@@ -72,12 +72,12 @@ function JoinPanel() {
       </div>
       <div className="rounded-2xl border border-dashed border-slate-300 p-6 text-center">
         <p className="text-sm text-slate-600">Or scan the code shown by the lecturer</p>
-        <div className="mx-auto mt-4 grid h-36 w-36 grid-cols-7 gap-1 rounded-lg bg-white p-2 ring-1 ring-slate-200" aria-hidden>
+        <div className="mx-auto mt-4 grid h-36 w-36 grid-cols-7 gap-1 rounded-lg bg-surface p-2 ring-1 ring-slate-200" aria-hidden>
           {Array.from({ length: 49 }).map((_, k) => (
-            <span key={k} className={`rounded-[2px] ${[0, 1, 2, 7, 14, 15, 16, 4, 5, 6, 13, 20, 28, 35, 42, 43, 44, 24, 26, 31, 33, 38, 40, 46, 10, 18].includes(k) ? "bg-brand-ink" : "bg-transparent"}`} />
+            <span key={k} className={`rounded-[2px] ${[0, 1, 2, 7, 14, 15, 16, 4, 5, 6, 13, 20, 28, 35, 42, 43, 44, 24, 26, 31, 33, 38, 40, 46, 10, 18].includes(k) ? "bg-bezel" : "bg-transparent"}`} />
           ))}
         </div>
-        <p className="mt-4 font-mono text-2xl font-bold tracking-[0.3em] text-navy-600">BIO101</p>
+        <p className="mt-4 font-mono text-2xl font-bold tracking-[0.3em] text-cyan-300">BIO101</p>
         <p className="mt-1 text-xs text-slate-500">Session code</p>
       </div>
     </div>
@@ -94,15 +94,15 @@ function StudentPanel() {
             <p className="text-lg font-bold">The Cell: Structure and Function</p>
           </div>
           <div className="flex rounded-lg bg-slate-100 p-1 text-xs font-medium">
-            <span className="rounded-md bg-white px-3 py-1.5 shadow-sm">English + Kiswahili</span>
+            <span className="rounded-md bg-surface px-3 py-1.5 shadow-sm">English + Kiswahili</span>
             <span className="px-3 py-1.5 text-slate-500">Kiswahili only</span>
           </div>
         </div>
         <ul className="mt-5 space-y-3">
           {segs.map((s, k) => (
-            <li key={k} className={`rounded-xl border p-4 ${k === segs.length - 1 ? "border-cyan-400 bg-cyan-50/40" : "border-slate-200"}`}>
+            <li key={k} className={`rounded-xl border p-4 ${k === segs.length - 1 ? "border-cyan-400 bg-cyan-400/10" : "border-slate-200"}`}>
               <p className="text-sm text-slate-600">{s.en}</p>
-              <p className="mt-1.5 font-medium text-navy-700" lang="sw">{s.sw}</p>
+              <p className="mt-1.5 font-medium text-cyan-200" lang="sw">{s.sw}</p>
             </li>
           ))}
         </ul>
@@ -112,16 +112,16 @@ function StudentPanel() {
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Ask a question</p>
           <div className="mt-2 flex gap-2 text-xs">
             <span className="rounded-md bg-navy-500 px-2.5 py-1 text-white">English</span>
-            <span className="rounded-md bg-white px-2.5 py-1 ring-1 ring-slate-200">Kiswahili</span>
+            <span className="rounded-md bg-surface px-2.5 py-1 ring-1 ring-slate-200">Kiswahili</span>
           </div>
-          <div className="mt-3 flex items-center gap-2 rounded-lg bg-white p-2.5 text-xs text-slate-500 ring-1 ring-slate-200">
+          <div className="mt-3 flex items-center gap-2 rounded-lg bg-surface p-2.5 text-xs text-slate-500 ring-1 ring-slate-200">
             <span className="h-2 w-2 rounded-full bg-red-500" /> Tap the microphone to speak
           </div>
         </div>
-        <div className="rounded-xl border border-cyan-200 bg-cyan-50 p-4">
-          <p className="text-xs font-semibold uppercase tracking-wider text-cyan-700">Term in this statement</p>
+        <div className="rounded-xl border border-cyan-400/40 bg-cyan-400/10 p-4">
+          <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300">Term in this statement</p>
           <p className="mt-1 font-semibold">Powerhouse of the cell</p>
-          <p className="text-sm text-navy-700">Kituo cha nishati cha seli</p>
+          <p className="text-sm text-cyan-200">Kituo cha nishati cha seli</p>
         </div>
         <div className="rounded-xl bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">My notes</p>
@@ -139,7 +139,7 @@ function LecturerPanel() {
         <div className="rounded-xl bg-slate-50 p-4">
           <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Session</p>
           <p className="mt-1 font-semibold">BIO 101 · Biology</p>
-          <p className="font-mono text-sm text-navy-600">Code BIO101</p>
+          <p className="font-mono text-sm text-cyan-300">Code BIO101</p>
         </div>
         <div className="space-y-2.5 rounded-xl border border-slate-200 p-4 text-sm">
           <Toggle on label="Lecturer microphone" />
@@ -162,7 +162,7 @@ function LecturerPanel() {
         {segs.map((s, k) => (
           <div key={k} className="grid grid-cols-2 border-b border-slate-100 text-sm last:border-0">
             <p className="p-3 text-slate-700">{s.en}</p>
-            <p className="border-l border-slate-100 p-3 text-navy-700" lang="sw">{s.sw}</p>
+            <p className="border-l border-slate-100 p-3 text-cyan-200" lang="sw">{s.sw}</p>
           </div>
         ))}
       </div>
@@ -177,11 +177,11 @@ function TermsPanel() {
         <div key={t.key} className="rounded-xl border border-slate-200 p-5">
           <div className="flex items-baseline justify-between gap-3">
             <p className="font-semibold">{t.english}</p>
-            <p className="text-right font-semibold text-navy-600" lang="sw">{t.kiswahili}</p>
+            <p className="text-right font-semibold text-cyan-300" lang="sw">{t.kiswahili}</p>
           </div>
           <p className="mt-2 text-sm text-slate-600">{t.definitionEn}</p>
           <p className="mt-1 text-sm text-slate-600" lang="sw">{t.definitionSw}</p>
-          {t.usageNote && <p className="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-xs text-amber-900">{t.usageNote}</p>}
+          {t.usageNote && <p className="mt-3 rounded-lg bg-amber-400/10 px-3 py-2 text-xs text-amber-200">{t.usageNote}</p>}
         </div>
       ))}
     </div>

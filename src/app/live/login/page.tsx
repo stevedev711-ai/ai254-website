@@ -15,7 +15,7 @@ export default async function LoginPage({ searchParams }: { searchParams: Promis
       <div className="card p-8 shadow-sm">
         <p className="eyebrow">{isAdmin ? "Administrator" : "Lecturer"}</p>
         <h1 className="mt-2 text-2xl font-bold">Sign in to AI254 LIVE</h1>
-        {denied && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">Your account does not have access to that area.</p>}
+        {denied && <p role="alert" className="mt-4 rounded-lg bg-red-400/10 p-3 text-sm text-red-300">Your account does not have access to that area.</p>}
         <LoginForm role={isAdmin ? "admin" : "lecturer"} next={safeNext} />
         <p className="mt-6 text-xs text-slate-500">
           Accounts are created by AI254 administrators. If you need access, contact <a href="mailto:info@ai254.net" className="underline">info@ai254.net</a>.

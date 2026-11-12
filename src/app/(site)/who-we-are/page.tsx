@@ -67,7 +67,7 @@ export default async function WhoWeArePage() {
               { n: "03", t: "Classroom evaluation", b: "Testing the technology with lecturers and students, documenting performance, identifying problems and improving the system using evidence." },
             ].map((a) => (
               <article key={a.n} className="card p-7">
-                <span className="font-mono text-sm font-semibold text-cyan-600">{a.n}</span>
+                <span className="font-mono text-sm font-semibold text-cyan-300">{a.n}</span>
                 <h3 className="mt-3 text-xl font-bold">{a.t}</h3>
                 <p className="mt-3 leading-relaxed text-slate-600">{a.b}</p>
               </article>
@@ -86,7 +86,7 @@ export default async function WhoWeArePage() {
             <p>
               The pilots looked at translation accuracy, student experience, comprehension, participation, confidence and technical performance. Their main purpose was to find out how the system behaves in a real lecture hall and what needs to improve.
             </p>
-            <div className="rounded-xl border border-slate-200 bg-white p-5 text-[15px]">
+            <div className="rounded-xl border border-slate-200 bg-surface p-5 text-[15px]">
               <p className="font-semibold text-brand-ink">What the pilots are, and what they are not</p>
               <p className="mt-2 mb-0 text-slate-600">
                 The pilots were classroom tests carried out with participating students and lecturers. They do not represent a formal endorsement, adoption or partnership agreement by {pilotFacts.institution}, and we do not report examination results or learning-outcome gains from them.
@@ -117,13 +117,13 @@ export default async function WhoWeArePage() {
                     // eslint-disable-next-line @next/next/no-img-element
                     <img src={m.photoUrl} alt={`Photograph of ${m.name}`} className="aspect-[4/3] w-full object-cover" />
                   ) : (
-                    <div className="flex aspect-[4/3] items-center justify-center bg-navy-50 font-display text-4xl font-bold text-navy-300" aria-hidden>
+                    <div className="flex aspect-[4/3] items-center justify-center bg-navy-400/15 font-display text-4xl font-bold text-navy-200" aria-hidden>
                       {m.name.split(" ").map((p) => p[0]).slice(0, 2).join("")}
                     </div>
                   )}
                   <div className="p-6">
                     <h3 className="text-lg font-bold">{m.name}</h3>
-                    <p className="text-sm font-medium text-navy-500">{m.role}</p>
+                    <p className="text-sm font-medium text-cyan-300">{m.role}</p>
                     {m.bio && <p className="mt-3 text-sm leading-relaxed text-slate-600">{m.bio}</p>}
                   </div>
                 </li>

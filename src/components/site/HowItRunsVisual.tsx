@@ -40,8 +40,8 @@ export function HowItRunsVisual() {
       onMouseLeave={() => setPaused(false)}
       aria-label="Animated illustration of how AI254 processes a lecture"
     >
-      <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-navy-100/70 via-white to-cyan-100/70 blur-[2px]" aria-hidden />
-      <div className="overflow-hidden rounded-3xl border border-white/70 bg-white/80 shadow-2xl shadow-navy-900/10 backdrop-blur">
+      <div className="absolute -inset-4 -z-10 rounded-[2rem] bg-gradient-to-br from-navy-700/30 via-page to-cyan-800/30 blur-[2px]" aria-hidden />
+      <div className="overflow-hidden rounded-3xl border border-white/10 bg-surface/80 shadow-2xl shadow-navy-900/10 backdrop-blur">
         {/* Header bar */}
         <div className="flex items-center justify-between bg-brand-gradient px-5 py-3 text-white">
           <span className="text-sm font-semibold">AI254 LIVE · BIO 101</span>
@@ -63,7 +63,7 @@ export function HowItRunsVisual() {
 
         {/* Steps */}
         <div className="border-t border-slate-100 bg-slate-50/80 px-5 py-3">
-          <p className="text-xs font-semibold uppercase tracking-wider text-navy-600" aria-live="polite">
+          <p className="text-xs font-semibold uppercase tracking-wider text-cyan-300" aria-live="polite">
             {i + 1}. {scenes[i].label}
           </p>
           <div className="mt-2 flex gap-1.5" role="tablist" aria-label="Steps">
@@ -129,7 +129,7 @@ function Typing({ text }: { text: string }) {
   return (
     <div className="flex h-full flex-col justify-center">
       <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Speech-to-text</p>
-      <div className="mt-3 rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="mt-3 rounded-2xl border border-slate-200 bg-surface p-5 shadow-sm">
         <p className="text-lg leading-relaxed text-brand-ink">
           {text.slice(0, n)}
           <span className="ml-0.5 inline-block h-5 w-0.5 translate-y-1 bg-cyan-500 animate-pulseDot" aria-hidden />
@@ -137,7 +137,7 @@ function Typing({ text }: { text: string }) {
       </div>
       <div className="mt-4 flex gap-2 text-[11px] text-slate-500">
         <span className="rounded-full bg-slate-100 px-2.5 py-1">Audio chunk processed</span>
-        <span className="rounded-full bg-cyan-50 px-2.5 py-1 text-cyan-800">Sentence detected</span>
+        <span className="rounded-full bg-cyan-400/10 px-2.5 py-1 text-cyan-300">Sentence detected</span>
       </div>
     </div>
   );
@@ -146,18 +146,18 @@ function Typing({ text }: { text: string }) {
 function Translate() {
   return (
     <div className="flex h-full flex-col justify-center gap-3">
-      <div className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+      <div className="rounded-2xl border border-slate-200 bg-surface p-4 shadow-sm">
         <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">English</p>
         <p className="mt-1 text-[15px] text-slate-700">{EN}</p>
       </div>
-      <div className="flex items-center justify-center gap-2 text-cyan-600" aria-hidden>
+      <div className="flex items-center justify-center gap-2 text-cyan-300" aria-hidden>
         <span className="h-px w-10 bg-gradient-to-r from-transparent to-cyan-400" />
         <svg viewBox="0 0 24 24" className="h-5 w-5 animate-bounce" fill="none" stroke="currentColor" strokeWidth="2.2"><path d="M12 5v14m0 0-5-5m5 5 5-5" /></svg>
         <span className="h-px w-10 bg-gradient-to-l from-transparent to-cyan-400" />
       </div>
-      <div className="animate-fadeUp rounded-2xl border-2 border-cyan-400 bg-cyan-50 p-4 shadow-sm [animation-delay:500ms]">
-        <p className="text-[11px] font-semibold uppercase tracking-wider text-cyan-700">Kiswahili</p>
-        <p className="mt-1 text-[15px] font-semibold text-navy-700" lang="sw">{SW}</p>
+      <div className="animate-fadeUp rounded-2xl border-2 border-cyan-400 bg-cyan-400/10 p-4 shadow-sm [animation-delay:500ms]">
+        <p className="text-[11px] font-semibold uppercase tracking-wider text-cyan-300">Kiswahili</p>
+        <p className="mt-1 text-[15px] font-semibold text-cyan-200" lang="sw">{SW}</p>
       </div>
     </div>
   );
@@ -171,13 +171,13 @@ function Terms() {
         ["Mitochondria", "Mitokondria"],
         ["Cellular respiration", "Upumuaji wa seli"],
       ].map(([en, sw], k) => (
-        <div key={en} className="flex animate-fadeUp items-center justify-between rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm" style={{ animationDelay: `${k * 350}ms` }}>
+        <div key={en} className="flex animate-fadeUp items-center justify-between rounded-xl border border-slate-200 bg-surface px-4 py-3 shadow-sm" style={{ animationDelay: `${k * 350}ms` }}>
           <span className="font-semibold">{en}</span>
           <span className="text-slate-400" aria-hidden>→</span>
-          <span className="font-semibold text-navy-700" lang="sw">{sw}</span>
+          <span className="font-semibold text-cyan-200" lang="sw">{sw}</span>
         </div>
       ))}
-      <p className="animate-fadeUp rounded-xl bg-amber-50 px-4 py-3 text-xs leading-relaxed text-amber-900 [animation-delay:800ms]">
+      <p className="animate-fadeUp rounded-xl bg-amber-400/10 px-4 py-3 text-xs leading-relaxed text-amber-200 [animation-delay:800ms]">
         Not the same as breathing (“kupumua”). The translation keeps the scientific meaning.
       </p>
     </div>
@@ -190,15 +190,15 @@ function Devices() {
       {[0, 1, 2].map((k) => (
         <div
           key={k}
-          className={`animate-fadeUp rounded-[1.4rem] border-[5px] border-brand-ink bg-brand-ink shadow-xl ${k === 1 ? "h-[220px] w-[112px] sm:h-[240px] sm:w-[132px]" : "h-[184px] w-[92px] sm:h-[200px] sm:w-[110px]"}`}
+          className={`animate-fadeUp rounded-[1.4rem] border-[5px] border-bezel bg-bezel shadow-xl ${k === 1 ? "h-[220px] w-[112px] sm:h-[240px] sm:w-[132px]" : "h-[184px] w-[92px] sm:h-[200px] sm:w-[110px]"}`}
           style={{ animationDelay: `${k * 250}ms` }}
         >
-          <div className="h-full overflow-hidden rounded-[1rem] bg-white">
+          <div className="h-full overflow-hidden rounded-[1rem] bg-surface">
             <div className="bg-navy-500 px-2 py-1.5 text-[8px] font-semibold text-white">BIO 101 · Live</div>
             <div className="space-y-1.5 p-2">
               <p className="text-[7.5px] leading-snug text-slate-500">{EN}</p>
-              <p className="rounded bg-cyan-50 p-1 text-[8.5px] font-semibold leading-snug text-navy-700" lang="sw">{SW}</p>
-              <p className="text-[7px] text-cyan-700">Upumuaji wa seli →</p>
+              <p className="rounded bg-cyan-400/10 p-1 text-[8.5px] font-semibold leading-snug text-cyan-200" lang="sw">{SW}</p>
+              <p className="text-[7px] text-cyan-300">Upumuaji wa seli →</p>
             </div>
           </div>
         </div>

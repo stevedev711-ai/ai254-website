@@ -97,7 +97,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
 
   return (
     <form onSubmit={onSubmit} noValidate className="mt-8 space-y-6">
-      {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">{error}</p>}
+      {error && <p role="alert" className="rounded-xl border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-300">{error}</p>}
       <div className="card p-5 sm:p-6">
         <label htmlFor="admissionNumber" className="label">Admission number</label>
         <input
@@ -122,7 +122,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
         <p className="text-base font-bold">Join an active lecture</p>
         <p className="mt-1 text-sm text-slate-500">Choose your class, then the unit being taught.</p>
         {sessions === null && !loadError && <p className="py-4 text-sm text-slate-500">Loading active lectures…</p>}
-        {loadError && <p className="py-2 text-sm text-amber-800">{loadError}</p>}
+        {loadError && <p className="py-2 text-sm text-amber-200">{loadError}</p>}
         {sessions?.length === 0 && <p className="py-4 text-sm text-slate-500">No lectures are live right now. Enter a code below if your lecturer has given you one.</p>}
         {sessions && sessions.length > 0 && (
           <div className="mt-4 grid gap-4 sm:grid-cols-2">
@@ -169,7 +169,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
           </div>
         )}
         {selected && (
-          <div className="mt-4 flex items-start justify-between gap-3 rounded-xl border border-cyan-300 bg-cyan-50/60 p-4 text-sm" aria-live="polite">
+          <div className="mt-4 flex items-start justify-between gap-3 rounded-xl border border-cyan-400/40 bg-cyan-400/10 p-4 text-sm" aria-live="polite">
             <dl className="grid grid-cols-[5.5rem_1fr] gap-x-3 gap-y-1">
               <dt className="text-xs font-semibold uppercase tracking-wider text-slate-500">Class</dt>
               <dd className="font-semibold">{selected.subject}</dd>
@@ -184,7 +184,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
             </dl>
             <span className="flex shrink-0 flex-col items-end gap-1">
               {selected.mode === "DEMO" && <span className="demo-badge !py-0.5 text-[10px]">Demo</span>}
-              <span className={`text-xs font-medium ${selected.status === "LIVE" ? "text-emerald-700" : "text-amber-700"}`}>{selected.status === "LIVE" ? "● Live" : "Paused"}</span>
+              <span className={`text-xs font-medium ${selected.status === "LIVE" ? "text-emerald-300" : "text-amber-200"}`}>{selected.status === "LIVE" ? "● Live" : "Paused"}</span>
             </span>
           </div>
         )}

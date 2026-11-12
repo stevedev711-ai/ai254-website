@@ -13,8 +13,8 @@ export default async function LiveLayout({ children }: { children: React.ReactNo
   const user = await getCurrentUser();
   const live = liveServicesConfigured();
   return (
-    <div className="flex min-h-screen flex-col bg-slate-50">
-      <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
+    <div className="flex min-h-screen flex-col bg-page">
+      <header className="sticky top-0 z-40 border-b border-slate-200 bg-surface">
         <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between gap-3 px-4 sm:px-6">
           <Link href="/" aria-label="AI254 home">
             <Logo suffix="LIVE" />
@@ -41,7 +41,7 @@ export default async function LiveLayout({ children }: { children: React.ReactNo
         </div>
       </header>
       <div id="main" className="flex-1">{children}</div>
-      <footer className="border-t border-slate-200 bg-white py-4 text-center text-xs text-slate-500">
+      <footer className="border-t border-slate-200 bg-surface py-4 text-center text-xs text-slate-500">
         AI254 LIVE · Automatic transcription and translation may contain errors. Always follow the lecturer&apos;s original explanation. ·{" "}
         <Link href="/privacy" className="underline">Privacy</Link>
       </footer>

@@ -40,10 +40,10 @@ export function ArchitectureDiagram() {
             <li key={s.key} className="relative flex lg:flex-col lg:items-center">
               {k > 0 && (
                 <svg className="absolute -top-3 left-6 h-3 w-1 lg:left-auto lg:right-1/2 lg:top-7 lg:h-1 lg:w-full lg:-translate-x-0" viewBox="0 0 100 4" preserveAspectRatio="none" aria-hidden>
-                  <line x1="0" y1="2" x2="100" y2="2" stroke={capture || k < 2 ? "#04A0E1" : "#CBD5E1"} strokeWidth="4" strokeDasharray="6 6" className={capture ? "animate-flow" : ""} />
+                  <line x1="0" y1="2" x2="100" y2="2" stroke={capture || k < 2 ? "#04A0E1" : "#33497A"} strokeWidth="4" strokeDasharray="6 6" className={capture ? "animate-flow" : ""} />
                 </svg>
               )}
-              <div className={`relative z-10 flex w-full items-center gap-4 rounded-xl border p-4 transition-all lg:mx-1.5 lg:flex-col lg:p-3 lg:text-center ${idle ? "border-slate-200 bg-slate-50 opacity-50" : s.toggle ? "border-cyan-400 bg-cyan-50" : "border-slate-200 bg-white"}`}>
+              <div className={`relative z-10 flex w-full items-center gap-4 rounded-xl border p-4 transition-all lg:mx-1.5 lg:flex-col lg:p-3 lg:text-center ${idle ? "border-slate-200 bg-slate-50 opacity-50" : s.toggle ? "border-cyan-400 bg-cyan-400/10" : "border-slate-200 bg-surface"}`}>
                 <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full font-mono text-sm font-bold ${idle ? "bg-slate-200 text-slate-500" : "bg-brand-gradient text-white"}`}>{k + 1}</span>
                 <div>
                   <p className="text-sm font-semibold leading-tight">{s.t}</p>

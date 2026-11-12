@@ -64,7 +64,7 @@ export default function TechnologyPage() {
           <div className="mt-12 grid gap-x-10 gap-y-6 md:grid-cols-2">
             {responsibilities.map(([t, b], k) => (
               <div key={t} className="flex gap-4">
-                <span className="font-mono text-sm font-semibold text-cyan-600">{String(k + 1).padStart(2, "0")}</span>
+                <span className="font-mono text-sm font-semibold text-cyan-300">{String(k + 1).padStart(2, "0")}</span>
                 <div>
                   <h3 className="font-semibold">{t}</h3>
                   <p className="mt-1 text-[15px] leading-relaxed text-slate-600">{b}</p>
@@ -84,7 +84,7 @@ export default function TechnologyPage() {
             </div>
             <ul className="flex flex-wrap gap-2 text-xs" aria-label="Status key">
               <li className="status-op">Operational</li>
-              <li className="badge bg-navy-50 text-navy-700 ring-1 ring-navy-100">Connects to AI254 services</li>
+              <li className="badge bg-navy-400/15 text-cyan-200 ring-1 ring-navy-400/30">Connects to AI254 services</li>
               <li className="status-dev">In development</li>
             </ul>
           </div>
@@ -93,7 +93,7 @@ export default function TechnologyPage() {
               <article key={c.t} className="card p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <h3 className="text-lg font-bold">{c.t}</h3>
-                  <span className={c.s === "op" ? "status-op" : c.s === "dev" ? "status-dev" : "badge bg-navy-50 text-navy-700 ring-1 ring-navy-100"}>{statusLabel[c.s]}</span>
+                  <span className={c.s === "op" ? "status-op" : c.s === "dev" ? "status-dev" : "badge bg-navy-400/15 text-cyan-200 ring-1 ring-navy-400/30"}>{statusLabel[c.s]}</span>
                 </div>
                 <p className="mt-3 text-[15px] leading-relaxed text-slate-600">{c.b}</p>
               </article>
@@ -115,7 +115,7 @@ export default function TechnologyPage() {
           <ol className="space-y-3">
             {priorities.map(([t, b], k) => (
               <li key={t} className="card flex gap-5 p-5">
-                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-50 font-mono text-sm font-bold text-navy-600">{k + 1}</span>
+                <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-navy-400/15 font-mono text-sm font-bold text-cyan-300">{k + 1}</span>
                 <div>
                   <h3 className="font-semibold">{t}</h3>
                   <p className="mt-1 text-[15px] text-slate-600">{b}</p>
@@ -134,7 +134,7 @@ export default function TechnologyPage() {
               <p className="mt-2 max-w-xl text-navy-100">Try AI254 LIVE yourself, or ask us for a technical walkthrough for your IT team.</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Link href="/live" className="btn bg-white text-navy-600 hover:bg-navy-50">Launch AI254 LIVE</Link>
+              <Link href="/live" className="btn bg-surface text-cyan-300 hover:bg-navy-400/15">Launch AI254 LIVE</Link>
               <Link href="/request-a-demo?interest=Technical%20architecture" className="btn border border-white/40 text-white hover:bg-white/10">Request a Technical Demo</Link>
             </div>
           </div>

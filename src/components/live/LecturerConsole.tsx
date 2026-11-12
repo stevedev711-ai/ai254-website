@@ -102,20 +102,20 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
     <main className="mx-auto max-w-[1400px] px-4 py-6 sm:px-6">
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <Link href="/live/lecturer" className="text-sm text-slate-500 hover:text-navy-600">← All sessions</Link>
+          <Link href="/live/lecturer" className="text-sm text-slate-500 hover:text-cyan-300">← All sessions</Link>
           <h1 className="mt-1 text-2xl font-bold">{session.title}</h1>
           <p className="text-sm text-slate-500">{session.courseCode} · {session.subject}</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           {session.mode === "DEMO" && <span className="demo-badge">Demonstration session · sample content</span>}
-          <span className={`badge ${session.status === "LIVE" ? "bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200" : session.status === "PAUSED" ? "bg-amber-50 text-amber-800" : "bg-slate-100 text-slate-700"}`}>
+          <span className={`badge ${session.status === "LIVE" ? "bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/30" : session.status === "PAUSED" ? "bg-amber-400/10 text-amber-200" : "bg-slate-100 text-slate-700"}`}>
             {session.status === "LIVE" && <span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulseDot" />}
             {{ SCHEDULED: "Not started", LIVE: "Live", PAUSED: "Paused", ENDED: "Ended" }[session.status]}
           </span>
         </div>
       </div>
 
-      {error && <p role="alert" className="mt-4 rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+      {error && <p role="alert" className="mt-4 rounded-lg bg-red-400/10 p-3 text-sm text-red-300">{error}</p>}
 
       <div className="mt-6 grid gap-6 lg:grid-cols-[340px_1fr]">
         {/* Controls */}
@@ -123,7 +123,7 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
           <section className="card p-5">
             <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">Students join with</p>
             <div className="mt-2 flex items-center justify-between gap-3">
-              <p className="font-mono text-3xl font-bold tracking-[0.2em] text-navy-600">{session.code}</p>
+              <p className="font-mono text-3xl font-bold tracking-[0.2em] text-cyan-300">{session.code}</p>
               <button onClick={() => setShowQr(true)} className="btn-outline btn-sm">Show QR</button>
             </div>
             <p className="mt-1 break-all text-xs text-slate-500">{joinUrl}</p>
@@ -158,7 +158,7 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
                 <div className="h-full bg-brand-gradient transition-[width] duration-100" style={{ width: `${Math.min(100, audio.level * 160)}%` }} />
               </div>
             )}
-            {audio.error && <p className="text-xs text-red-700">{audio.error}</p>}
+            {audio.error && <p className="text-xs text-red-300">{audio.error}</p>}
             {session.mode === "LIVE" && (audio.stats.sent > 0 || audio.stats.failed > 0) && (
               <p className="text-xs text-slate-500">Audio chunks processed: {audio.stats.sent}{audio.stats.failed ? ` · failed: ${audio.stats.failed}` : ""}</p>
             )}
@@ -181,7 +181,7 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
                     </div>
                   </div>
                 ) : (
-                  <button onClick={() => setConfirmEnd(true)} className="btn-outline w-full border-red-200 text-red-700 hover:border-red-400 hover:text-red-800">End lecture session</button>
+                  <button onClick={() => setConfirmEnd(true)} className="btn-outline w-full border-red-400/40 text-red-300 hover:border-red-400 hover:text-red-300">End lecture session</button>
                 )}
               </div>
             )}
@@ -198,7 +198,7 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
                     <p lang={q.language}>{q.text}</p>
                     <div className="mt-1.5 flex items-center justify-between text-xs text-slate-500">
                       <span>{q.admissionNumber}{q.university ? ` · ${q.university}` : ""} · {q.language === "sw" ? "Kiswahili" : "English"} · {new Date(q.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
-                      <button onClick={() => markAnswered(q)} className="font-semibold text-navy-600 hover:underline">{q.answered ? "Reopen" : "Mark answered"}</button>
+                      <button onClick={() => markAnswered(q)} className="font-semibold text-cyan-300 hover:underline">{q.answered ? "Reopen" : "Mark answered"}</button>
                     </div>
                   </li>
                 ))}
@@ -226,21 +226,21 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
             {segs.map((s) => (
               <div key={s.seq} className="grid border-b border-slate-100 text-[15px] md:grid-cols-2">
                 <p className="px-5 py-3 text-slate-700"><span className="mr-2 font-mono text-xs text-slate-400">{s.seq}</span>{s.english}</p>
-                <p className="border-slate-100 px-5 pb-3 text-navy-700 md:border-l md:py-3" lang="sw">{s.kiswahili ?? <em className="text-sm text-red-600">Translation failed (see admin logs)</em>}</p>
+                <p className="border-slate-100 px-5 pb-3 text-cyan-200 md:border-l md:py-3" lang="sw">{s.kiswahili ?? <em className="text-sm text-red-300">Translation failed (see admin logs)</em>}</p>
               </div>
             ))}
           </div>
-          {session.mode === "DEMO" && <p className="border-t border-amber-200 bg-amber-50 px-5 py-2 text-xs text-amber-900">Demonstration session: sample statements and hand-prepared translations. Microphone audio is not processed.</p>}
+          {session.mode === "DEMO" && <p className="border-t border-amber-400/30 bg-amber-400/10 px-5 py-2 text-xs text-amber-200">Demonstration session: sample statements and hand-prepared translations. Microphone audio is not processed.</p>}
         </section>
       </div>
 
       {showQr && (
-        <div role="dialog" aria-modal="true" aria-label="Session QR code" className="fixed inset-0 z-50 flex items-center justify-center bg-brand-ink/80 p-4" onClick={() => setShowQr(false)}>
-          <div className="rounded-2xl bg-white p-8 text-center" onClick={(e) => e.stopPropagation()}>
+        <div role="dialog" aria-modal="true" aria-label="Session QR code" className="fixed inset-0 z-50 flex items-center justify-center bg-black/70 p-4" onClick={() => setShowQr(false)}>
+          <div className="rounded-2xl bg-white p-8 text-center text-[#111111]" onClick={(e) => e.stopPropagation()}>
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={qr} alt={`QR code to join session ${session.code}`} className="mx-auto h-72 w-72 sm:h-96 sm:w-96" />
-            <p className="mt-4 font-mono text-4xl font-bold tracking-[0.3em] text-navy-600">{session.code}</p>
-            <p className="mt-1 text-sm text-slate-500">{session.courseCode} · {session.title}</p>
+            <p className="mt-4 font-mono text-4xl font-bold tracking-[0.3em] text-[#264AA0]">{session.code}</p>
+            <p className="mt-1 text-sm text-[#475569]">{session.courseCode} · {session.title}</p>
             <button autoFocus onClick={() => setShowQr(false)} className="btn-outline mt-5">Close</button>
           </div>
         </div>

@@ -47,7 +47,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       </div>
       <nav aria-label="Administration sections" className="mt-6 flex gap-1 overflow-x-auto border-b border-slate-200">
         {TABS.map(([k, l]) => (
-          <Link key={k} href={`/live/admin?tab=${k}`} aria-current={tab === k ? "page" : undefined} className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium ${tab === k ? "border-navy-500 text-navy-600" : "border-transparent text-slate-600 hover:text-brand-ink"}`}>
+          <Link key={k} href={`/live/admin?tab=${k}`} aria-current={tab === k ? "page" : undefined} className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium ${tab === k ? "border-navy-500 text-cyan-300" : "border-transparent text-slate-600 hover:text-brand-ink"}`}>
             {l}
           </Link>
         ))}
@@ -116,11 +116,11 @@ function Stat({ label, value, sub, href, warn }: { label: string; value: number;
   const inner = (
     <>
       <p className="text-sm text-slate-500">{label}</p>
-      <p className={`mt-2 text-3xl font-bold ${warn ? "text-red-700" : ""}`}>{value}</p>
+      <p className={`mt-2 text-3xl font-bold ${warn ? "text-red-300" : ""}`}>{value}</p>
       {sub && <p className="mt-1 text-xs text-slate-500">{sub}</p>}
     </>
   );
-  return href ? <Link href={href} className="card block p-5 hover:border-navy-300">{inner}</Link> : <div className="card p-5">{inner}</div>;
+  return href ? <Link href={href} className="card block p-5 hover:border-navy-400/60">{inner}</Link> : <div className="card p-5">{inner}</div>;
 }
 
 function ConfigRow({ ok, label, okText, badText, neutral }: { ok: boolean; label: string; okText: string; badText: string; neutral?: boolean }) {
@@ -151,7 +151,7 @@ async function Sessions() {
         <tr key={s.id} className="align-top">
           <td className="px-4 py-3"><p className="font-semibold">{s.title}</p><p className="text-xs text-slate-500">{s.courseCode} · {s.subject} · <span className="font-mono">{s.code}</span></p></td>
           <td className="px-4 py-3">{s.lecturer?.name ?? <span className="text-slate-400">Public demo</span>}</td>
-          <td className="px-4 py-3">{s.mode === "DEMO" ? <span className="demo-badge">Demo</span> : <span className="badge bg-navy-50 text-navy-700">Live</span>}</td>
+          <td className="px-4 py-3">{s.mode === "DEMO" ? <span className="demo-badge">Demo</span> : <span className="badge bg-navy-400/15 text-cyan-200">Live</span>}</td>
           <td className="px-4 py-3">{s.status}</td>
           <td className="px-4 py-3">{s.participants.length} / {s._count.participants}</td>
           <td className="px-4 py-3">{s._count.segments}</td>
@@ -161,7 +161,7 @@ async function Sessions() {
             <div className="flex gap-2">
               <Link href={`/live/lecturer/${s.id}`} className="btn-outline btn-sm">Monitor</Link>
               {s.status !== "ENDED" && (
-                <form action={endSession}><input type="hidden" name="id" value={s.id} /><ConfirmButton label="End" confirm="End this session for all students?" className="btn-sm btn border border-red-200 text-red-700" /></form>
+                <form action={endSession}><input type="hidden" name="id" value={s.id} /><ConfirmButton label="End" confirm="End this session for all students?" className="btn-sm btn border border-red-400/40 text-red-300" /></form>
               )}
             </div>
           </td>
@@ -195,7 +195,7 @@ async function Lecturers({ meId }: { meId: string }) {
                     <button className="btn-outline btn-sm w-full">{u.active ? "Deactivate" : "Activate"}</button>
                   </form>
                   <details>
-                    <summary className="cursor-pointer text-xs font-semibold text-navy-600">Reset password</summary>
+                    <summary className="cursor-pointer text-xs font-semibold text-cyan-300">Reset password</summary>
                     <ActionForm action={resetPassword} submitLabel="Set password" className="mt-2" resetOnSuccess>
                       <input type="hidden" name="id" value={u.id} />
                       <input name="password" type="password" minLength={12} required placeholder="New password (12+ chars)" className="input text-sm" autoComplete="new-password" />
@@ -253,9 +253,9 @@ async function Terms({ q, subject, edit }: { q?: string; subject?: string; edit?
           {terms.map((t) => (
             <tr key={t.id} className="align-top">
               <td className="px-4 py-3 font-semibold">{t.english}</td>
-              <td className="px-4 py-3 font-semibold text-navy-700" lang="sw">{t.kiswahili}</td>
+              <td className="px-4 py-3 font-semibold text-cyan-200" lang="sw">{t.kiswahili}</td>
               <td className="px-4 py-3">{t.subject}</td>
-              <td className="max-w-sm px-4 py-3 text-xs text-slate-600"><p lang="sw">{t.definitionSw}</p>{t.usageNote && <p className="mt-1 text-amber-800">{t.usageNote}</p>}</td>
+              <td className="max-w-sm px-4 py-3 text-xs text-slate-600"><p lang="sw">{t.definitionSw}</p>{t.usageNote && <p className="mt-1 text-amber-200">{t.usageNote}</p>}</td>
               <td className="px-4 py-3">
                 <form action={setTermStatus} className="flex gap-1">
                   <input type="hidden" name="id" value={t.id} />
@@ -269,7 +269,7 @@ async function Terms({ q, subject, edit }: { q?: string; subject?: string; edit?
               <td className="px-4 py-3">
                 <div className="flex gap-2">
                   <Link href={`/live/admin?tab=terms&edit=${t.id}`} className="btn-outline btn-sm">Edit</Link>
-                  <form action={deleteTerm}><input type="hidden" name="id" value={t.id} /><ConfirmButton label="Delete" confirm={`Delete “${t.english}”?`} className="btn-sm btn text-red-700 hover:bg-red-50" /></form>
+                  <form action={deleteTerm}><input type="hidden" name="id" value={t.id} /><ConfirmButton label="Delete" confirm={`Delete “${t.english}”?`} className="btn-sm btn text-red-300 hover:bg-red-400/10" /></form>
                 </div>
               </td>
             </tr>
@@ -314,8 +314,8 @@ async function Requests() {
             <div>
               <p className="text-lg font-bold">{r.organisation}</p>
               <p className="text-sm text-slate-600">
-                {r.fullName}{r.jobTitle ? `, ${r.jobTitle}` : ""} · <a href={`mailto:${r.email}`} className="text-navy-600 underline">{r.email}</a>
-                {r.phone && <> · <a href={`tel:${r.phone.replace(/\s/g, "")}`} className="text-navy-600 underline">{r.phone}</a></>}
+                {r.fullName}{r.jobTitle ? `, ${r.jobTitle}` : ""} · <a href={`mailto:${r.email}`} className="text-cyan-300 underline">{r.email}</a>
+                {r.phone && <> · <a href={`tel:${r.phone.replace(/\s/g, "")}`} className="text-cyan-300 underline">{r.phone}</a></>}
               </p>
             </div>
             <div className="text-right text-xs text-slate-500">
@@ -346,7 +346,7 @@ async function Requests() {
 }
 
 function EmailBadge({ s }: { s: string }) {
-  const c = s === "SENT" ? "text-emerald-700" : s === "FAILED" ? "text-red-700" : "text-amber-700";
+  const c = s === "SENT" ? "text-emerald-300" : s === "FAILED" ? "text-red-300" : "text-amber-200";
   return <span className={`font-semibold ${c}`}>{s.replace("_", " ").toLowerCase()}</span>;
 }
 function Info({ k, v }: { k: string; v?: string | null }) {
@@ -366,7 +366,7 @@ async function Messages() {
             <p className="font-bold">{m.subject}</p>
             <p className="text-xs text-slate-500">{fmt(m.createdAt)} · Notification: <EmailBadge s={m.notifyStatus} /></p>
           </div>
-          <p className="text-sm text-slate-600">{m.name} · <a href={`mailto:${m.email}`} className="text-navy-600 underline">{m.email}</a></p>
+          <p className="text-sm text-slate-600">{m.name} · <a href={`mailto:${m.email}`} className="text-cyan-300 underline">{m.email}</a></p>
           <p className="mt-3 whitespace-pre-wrap text-sm text-slate-700">{m.message}</p>
           <form action={setMessageStatus} className="mt-3">
             <input type="hidden" name="id" value={m.id} />
@@ -400,7 +400,7 @@ async function Team({ edit }: { edit?: string }) {
                 <td className="px-4 py-3">{m.published ? <span className="status-op">Published</span> : <span className="badge bg-slate-100 text-slate-600">Hidden</span>}</td>
                 <td className="px-4 py-3"><div className="flex gap-2">
                   <Link href={`/live/admin?tab=team&edit=${m.id}`} className="btn-outline btn-sm">Edit</Link>
-                  <form action={deleteTeamMember}><input type="hidden" name="id" value={m.id} /><ConfirmButton label="Remove" confirm={`Remove ${m.name}?`} className="btn-sm btn text-red-700 hover:bg-red-50" /></form>
+                  <form action={deleteTeamMember}><input type="hidden" name="id" value={m.id} /><ConfirmButton label="Remove" confirm={`Remove ${m.name}?`} className="btn-sm btn text-red-300 hover:bg-red-400/10" /></form>
                 </div></td>
               </tr>
             ))}
@@ -483,7 +483,7 @@ function LogTable({ logs, showMeta }: { logs: { id: string; level: string; sourc
         {logs.map((l) => (
           <tr key={l.id} className="align-top">
             <td className="whitespace-nowrap px-4 py-2 text-xs">{fmt(l.createdAt)}</td>
-            <td className="px-4 py-2"><span className={`text-xs font-semibold ${l.level === "ERROR" ? "text-red-700" : l.level === "WARN" ? "text-amber-700" : "text-slate-500"}`}>{l.level}</span></td>
+            <td className="px-4 py-2"><span className={`text-xs font-semibold ${l.level === "ERROR" ? "text-red-300" : l.level === "WARN" ? "text-amber-200" : "text-slate-500"}`}>{l.level}</span></td>
             <td className="px-4 py-2 font-mono text-xs">{l.source}</td>
             <td className="px-4 py-2 text-sm">{l.message}</td>
             <td className="px-4 py-2">{showMeta && l.meta && <pre className="max-w-md overflow-x-auto whitespace-pre-wrap break-all text-[11px] text-slate-500">{JSON.stringify(l.meta, null, 1)}</pre>}</td>

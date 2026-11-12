@@ -11,7 +11,7 @@ export const metadata: Metadata = {
 export default function ContactPage() {
   return (
     <section className="relative">
-      <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top_right,#E8F6FD_0%,transparent_55%)]" aria-hidden />
+      <div className="absolute inset-x-0 top-0 -z-10 h-[420px] bg-[radial-gradient(ellipse_at_top_right,rgba(4,160,225,0.16)_0%,transparent_55%)]" aria-hidden />
       <div className="container-x grid gap-12 py-16 sm:py-20 lg:grid-cols-[1fr_1.4fr]">
         <div>
           <p className="eyebrow">Contact Us</p>
@@ -23,7 +23,7 @@ export default function ContactPage() {
             <ContactItem label="Country" value={site.country} icon="M12 21s-7-6.2-7-11a7 7 0 1 1 14 0c0 4.8-7 11-7 11Zm0-8.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z" />
           </ul>
           <p className="mt-8 text-sm text-slate-500">
-            For a demonstration of AI254 LIVE, use the <a href="/request-a-demo" className="font-medium text-navy-600 underline">demo request form</a> so we have the details we need.
+            For a demonstration of AI254 LIVE, use the <a href="/request-a-demo" className="font-medium text-cyan-300 underline">demo request form</a> so we have the details we need.
           </p>
         </div>
         <div className="card p-6 shadow-sm sm:p-10">
@@ -37,7 +37,7 @@ export default function ContactPage() {
 function ContactItem({ label, value, href, icon }: { label: string; value: string; href?: string; icon: string }) {
   const inner = (
     <>
-      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-navy-50 text-navy-600">
+      <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-navy-400/15 text-cyan-300">
         <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinejoin="round" aria-hidden><path d={icon} /></svg>
       </span>
       <span>

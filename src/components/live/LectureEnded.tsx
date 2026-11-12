@@ -83,7 +83,7 @@ export function LectureEnded({ session, join }: { session: { id: string; subject
   return (
     <div className="space-y-4" aria-live="polite">
       {started.map((s) => (
-        <div key={s.id} role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border-2 border-cyan-400 bg-cyan-50 p-4 shadow-sm">
+        <div key={s.id} role="status" className="flex flex-wrap items-center justify-between gap-3 rounded-xl border-2 border-cyan-400 bg-cyan-400/10 p-4 shadow-sm">
           <p className="text-sm">
             <span className="mr-2 inline-block h-2 w-2 rounded-full bg-cyan-500 animate-pulseDot" aria-hidden />
             <strong className="font-mono">{s.courseCode}</strong> — {unitName(s.title)} <span className="text-slate-600">has started.</span>
@@ -92,19 +92,19 @@ export function LectureEnded({ session, join }: { session: { id: string; subject
         </div>
       ))}
 
-      <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-        <p className="font-semibold text-emerald-900">The lecture has ended</p>
-        {session.summary && <p className="mt-2 text-sm leading-relaxed text-emerald-900/90"><strong>Summary:</strong> {session.summary}</p>}
-        <p className="mt-2 text-xs text-emerald-900/70">Your notes for this lecture are still saved on this device.</p>
+      <div className="rounded-xl border border-emerald-400/30 bg-emerald-400/10 p-5">
+        <p className="font-semibold text-emerald-300">The lecture has ended</p>
+        {session.summary && <p className="mt-2 text-sm leading-relaxed text-emerald-300"><strong>Summary:</strong> {session.summary}</p>}
+        <p className="mt-2 text-xs text-emerald-300">Your notes for this lecture are still saved on this device.</p>
       </div>
 
-      <section className="rounded-xl border border-slate-200 bg-white p-5" aria-labelledby="next-h">
+      <section className="rounded-xl border border-slate-200 bg-surface p-5" aria-labelledby="next-h">
         <h2 id="next-h" className="font-bold">Next lecture</h2>
         <p className="mt-1 text-sm text-slate-500">
           Join as <span className="font-mono">{join.admissionNumber}</span>
           {join.university ? ` · ${join.university}` : ""}. New units in {session.subject} will be shown here as they start.
         </p>
-        {error && <p role="alert" className="mt-3 rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+        {error && <p role="alert" className="mt-3 rounded-lg bg-red-400/10 p-3 text-sm text-red-300">{error}</p>}
         {live === null ? (
           <p className="mt-4 text-sm text-slate-500">Checking for live lectures…</p>
         ) : live.length === 0 ? (

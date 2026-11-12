@@ -16,7 +16,24 @@ const config: Config = {
           navy: "#264AA0",
           blue: "#1674BC",
           cyan: "#04A0E1",
-          ink: "#111111",
+          ink: "#F4F7FC", // primary text on the dark navy theme (logo wordmark #111111 is used on light backgrounds only)
+        },
+        /** Dark theme surfaces. Page background is #0C1834 (navy-900). */
+        page: "#0C1834",
+        surface: "#13244A",
+        bezel: "#050A18",
+        /** Neutral scale for the dark navy theme (50 = darkest surface tint, 900 = near-white text). */
+        slate: {
+          50: "#102044",
+          100: "#172A55",
+          200: "#233866",
+          300: "#33497A",
+          400: "#7D8DB0",
+          500: "#A3B1CC",
+          600: "#BAC6DC",
+          700: "#CFD8E8",
+          800: "#E2E8F2",
+          900: "#F1F5FB",
         },
         navy: {
           50: "#EEF2FA",

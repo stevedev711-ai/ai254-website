@@ -25,7 +25,7 @@ export function Footer() {
           <ul className="mt-4 space-y-2.5 text-sm">
             {quickLinks.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="text-slate-600 hover:text-navy-500">
+                <Link href={l.href} className="text-slate-600 hover:text-cyan-300">
                   {l.label}
                 </Link>
               </li>
@@ -37,11 +37,11 @@ export function Footer() {
           <dl className="mt-4 space-y-2.5 text-sm text-slate-600">
             <div className="flex gap-2">
               <dt className="w-16 shrink-0 text-slate-500">Email</dt>
-              <dd><a href={`mailto:${site.email}`} className="hover:text-navy-500">{site.email}</a></dd>
+              <dd><a href={`mailto:${site.email}`} className="hover:text-cyan-300">{site.email}</a></dd>
             </div>
             <div className="flex gap-2">
               <dt className="w-16 shrink-0 text-slate-500">Phone</dt>
-              <dd><a href={site.phoneHref} className="hover:text-navy-500">{site.phone}</a></dd>
+              <dd><a href={site.phoneHref} className="hover:text-cyan-300">{site.phone}</a></dd>
             </div>
             <div className="flex gap-2">
               <dt className="w-16 shrink-0 text-slate-500">Location</dt>
@@ -54,8 +54,8 @@ export function Footer() {
         <div className="container-x flex flex-col gap-3 py-6 text-xs text-slate-500 sm:flex-row sm:items-center sm:justify-between">
           <p>© 2026 AI254. All rights reserved.</p>
           <div className="flex gap-5">
-            <Link href="/privacy" className="hover:text-navy-500">Privacy Policy</Link>
-            <Link href="/terms" className="hover:text-navy-500">Terms of Use</Link>
+            <Link href="/privacy" className="hover:text-cyan-300">Privacy Policy</Link>
+            <Link href="/terms" className="hover:text-cyan-300">Terms of Use</Link>
           </div>
         </div>
       </div>

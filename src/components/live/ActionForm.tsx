@@ -23,7 +23,7 @@ export function ActionForm({ action, children, submitLabel, className = "", rese
       {children}
       <div className="mt-3 flex flex-wrap items-center gap-3">
         <Submit label={submitLabel} />
-        {state && <p role="status" className={`text-sm ${state.ok ? "text-emerald-700" : "text-red-700"}`}>{state.message}</p>}
+        {state && <p role="status" className={`text-sm ${state.ok ? "text-emerald-300" : "text-red-300"}`}>{state.message}</p>}
       </div>
     </form>
   );

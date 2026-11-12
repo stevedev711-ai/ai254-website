@@ -44,7 +44,7 @@ export function ProcessFlow() {
       {/* Connector track (desktop) */}
       <div className="relative hidden lg:block" aria-hidden>
         <svg viewBox="0 0 1000 40" className="h-10 w-full" preserveAspectRatio="none">
-          <line x1="125" y1="20" x2="875" y2="20" stroke="#E2E8F0" strokeWidth="3" />
+          <line x1="125" y1="20" x2="875" y2="20" stroke="#233866" strokeWidth="3" />
           <line
             x1="125"
             y1="20"
@@ -62,7 +62,7 @@ export function ProcessFlow() {
             </linearGradient>
           </defs>
           {stages.map((_, k) => (
-            <circle key={k} cx={125 + k * 250} cy="20" r={k === active ? 9 : 6} fill={k <= active ? (k === active ? "#04A0E1" : "#264AA0") : "#CBD5E1"} style={{ transition: "all .4s" }} />
+            <circle key={k} cx={125 + k * 250} cy="20" r={k === active ? 9 : 6} fill={k <= active ? (k === active ? "#04A0E1" : "#264AA0") : "#33497A"} style={{ transition: "all .4s" }} />
           ))}
         </svg>
       </div>
@@ -74,10 +74,10 @@ export function ProcessFlow() {
               type="button"
               onClick={() => setActive(k)}
               aria-pressed={k === active}
-              className={`h-full w-full rounded-2xl border p-6 text-left transition-all ${k === active ? "border-cyan-400 bg-white shadow-lg shadow-cyan-900/5" : "border-slate-200 bg-white/60 hover:border-slate-300"}`}
+              className={`h-full w-full rounded-2xl border p-6 text-left transition-all ${k === active ? "border-cyan-400 bg-surface shadow-lg shadow-cyan-900/5" : "border-slate-200 bg-surface/60 hover:border-slate-300"}`}
             >
               <div className="flex items-center gap-3">
-                <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${k === active ? "bg-brand-gradient text-white" : "bg-navy-50 text-navy-500"}`}>
+                <span className={`flex h-11 w-11 items-center justify-center rounded-xl transition-colors ${k === active ? "bg-brand-gradient text-white" : "bg-navy-400/15 text-cyan-300"}`}>
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden>
                     <path d={s.icon} />
                   </svg>
@@ -86,7 +86,7 @@ export function ProcessFlow() {
               </div>
               <h3 className="mt-4 text-lg font-bold leading-snug">{s.title}</h3>
               <p className="mt-2 text-sm leading-relaxed text-slate-600">{s.body}</p>
-              <p className={`mt-4 rounded-lg px-3 py-2 font-mono text-xs transition-colors ${k === active ? "bg-cyan-50 text-cyan-800" : "bg-slate-50 text-slate-500"}`} lang={k === 3 ? "sw" : "en"}>
+              <p className={`mt-4 rounded-lg px-3 py-2 font-mono text-xs transition-colors ${k === active ? "bg-cyan-400/10 text-cyan-300" : "bg-slate-50 text-slate-500"}`} lang={k === 3 ? "sw" : "en"}>
                 {s.sample}
               </p>
             </button>

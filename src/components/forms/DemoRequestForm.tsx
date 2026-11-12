@@ -60,12 +60,12 @@ export function DemoRequestForm({ defaultInterest }: { defaultInterest?: string 
 
   if (state.kind === "success") {
     return (
-      <div ref={statusRef} tabIndex={-1} role="status" className="rounded-2xl border border-emerald-200 bg-emerald-50 p-8 outline-none">
+      <div ref={statusRef} tabIndex={-1} role="status" className="rounded-2xl border border-emerald-400/30 bg-emerald-400/10 p-8 outline-none">
         <div className="flex h-12 w-12 items-center justify-center rounded-full bg-emerald-600 text-white" aria-hidden>
           <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" stroke="currentColor" strokeWidth="2.5"><path d="M5 12l5 5L20 7" /></svg>
         </div>
-        <h2 className="mt-5 text-2xl font-bold text-emerald-900">Your demo request has been received</h2>
-        <p className="mt-3 leading-relaxed text-emerald-900/90">{state.message}</p>
+        <h2 className="mt-5 text-2xl font-bold text-emerald-300">Your demo request has been received</h2>
+        <p className="mt-3 leading-relaxed text-emerald-300">{state.message}</p>
         <button type="button" onClick={reset} className="btn-outline mt-6">Submit another request</button>
       </div>
     );
@@ -79,7 +79,7 @@ export function DemoRequestForm({ defaultInterest }: { defaultInterest?: string 
       <Honeypot />
       <div ref={statusRef} tabIndex={-1} className="outline-none" aria-live="assertive">
         {state.kind === "error" && (
-          <div role="alert" className="rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
+          <div role="alert" className="rounded-xl border border-red-400/40 bg-red-400/10 p-4 text-sm text-red-300">
             <strong className="font-semibold">Your request was not sent.</strong> {state.message}
           </div>
         )}
@@ -160,7 +160,7 @@ export function DemoRequestForm({ defaultInterest }: { defaultInterest?: string 
           />
           <span className="text-sm leading-relaxed text-slate-700">
             I agree to be contacted by AI254 about this demonstration request. My details will be used only for this purpose, as described in the{" "}
-            <a href="/privacy" className="font-medium text-navy-600 underline">Privacy Policy</a>. <span className="text-red-600" aria-hidden>*</span>
+            <a href="/privacy" className="font-medium text-cyan-300 underline">Privacy Policy</a>. <span className="text-red-300" aria-hidden>*</span>
           </span>
         </label>
         {err("consent") && <p id="consent-error" className="field-error">{err("consent")}</p>}
@@ -173,7 +173,7 @@ export function DemoRequestForm({ defaultInterest }: { defaultInterest?: string 
           {submitting && <span className="h-4 w-4 animate-spin rounded-full border-2 border-white/40 border-t-white" aria-hidden />}
           {submitting ? "Sending…" : "Send Demo Request"}
         </button>
-        <p className="text-xs text-slate-500"><span className="text-red-600">*</span> Required fields</p>
+        <p className="text-xs text-slate-500"><span className="text-red-300">*</span> Required fields</p>
       </div>
     </form>
   );

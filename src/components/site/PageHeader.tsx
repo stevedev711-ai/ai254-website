@@ -1,7 +1,7 @@
 export function PageHeader({ eyebrow, title, intro, children, visual }: { eyebrow: string; title: string; intro?: string; children?: React.ReactNode; visual?: React.ReactNode }) {
   return (
     <section className="relative overflow-hidden border-b border-slate-100">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,#E8F6FD_0%,transparent_55%)]" aria-hidden />
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_top_right,rgba(4,160,225,0.16)_0%,transparent_55%)]" aria-hidden />
       <div className={`container-x py-16 sm:py-20 ${visual ? "grid items-center gap-12 lg:grid-cols-[1.25fr_1fr]" : ""}`}>
         <div>
           <p className="eyebrow">{eyebrow}</p>

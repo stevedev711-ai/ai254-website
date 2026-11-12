@@ -47,7 +47,7 @@ export function CreateSessionForm({ liveAvailable }: { liveAvailable: boolean })
 
   return (
     <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
-      {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
+      {error && <p role="alert" className="rounded-lg bg-red-400/10 p-3 text-sm text-red-300">{error}</p>}
       <div>
         <label htmlFor="title" className="label">Class</label>
         <input id="title" name="title" className="input" placeholder="Class topic, e.g. The Cell: Structure and Function" required maxLength={160} aria-invalid={fe.title ? true : undefined} />

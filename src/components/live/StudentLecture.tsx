@@ -135,7 +135,7 @@ export function StudentLecture({ code }: { code: string }) {
     <div className="mx-auto flex max-w-[1400px] flex-col lg:h-[calc(100vh-3.5rem-3.25rem)] lg:flex-row">
       {/* Main lecture column */}
       <section className="flex min-h-0 flex-1 flex-col">
-        <div className="border-b border-slate-200 bg-white px-4 py-3 sm:px-6">
+        <div className="border-b border-slate-200 bg-surface px-4 py-3 sm:px-6">
           <div className="flex flex-wrap items-start justify-between gap-3">
             <div className="min-w-0">
               <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
@@ -150,13 +150,13 @@ export function StudentLecture({ code }: { code: string }) {
             <div className="flex flex-wrap items-center gap-2">
               {session.mode === "DEMO" && <span className="demo-badge">Demonstration · sample content</span>}
               <StatusPill status={session.status} mic={session.micEnabled} />
-              {conn === "retrying" && <span className="badge bg-amber-50 text-amber-800">Reconnecting…</span>}
+              {conn === "retrying" && <span className="badge bg-amber-400/10 text-amber-200">Reconnecting…</span>}
             </div>
           </div>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <div className="flex rounded-lg bg-slate-100 p-1 text-xs font-medium" role="group" aria-label="Language display">
               {([["both", "English + Kiswahili"], ["sw", "Kiswahili"], ["en", "English"]] as const).map(([v, l]) => (
-                <button key={v} onClick={() => setView(v)} aria-pressed={view === v} className={`rounded-md px-3 py-1.5 ${view === v ? "bg-white shadow-sm" : "text-slate-600"}`}>{l}</button>
+                <button key={v} onClick={() => setView(v)} aria-pressed={view === v} className={`rounded-md px-3 py-1.5 ${view === v ? "bg-surface shadow-sm" : "text-slate-600"}`}>{l}</button>
               ))}
             </div>
             <div className="flex items-center rounded-lg bg-slate-100 p-1 text-xs font-semibold" role="group" aria-label="Text size">
@@ -172,17 +172,17 @@ export function StudentLecture({ code }: { code: string }) {
         </div>
 
         {/* Mobile panel tabs */}
-        <nav className="sticky top-14 z-30 grid grid-cols-4 border-b border-slate-200 bg-white text-xs font-semibold lg:hidden" aria-label="Lecture panels">
+        <nav className="sticky top-14 z-30 grid grid-cols-4 border-b border-slate-200 bg-surface text-xs font-semibold lg:hidden" aria-label="Lecture panels">
           {([["lecture", "Lecture"], ["terms", `Terms${seenTerms.length ? ` (${seenTerms.length})` : ""}`], ["notes", "Notes"], ["ask", "Ask"]] as const).map(([p, l]) => (
-            <button key={p} onClick={() => setPanel(p)} aria-pressed={panel === p} className={`border-b-2 py-3 ${panel === p ? "border-cyan-500 text-navy-600" : "border-transparent text-slate-500"}`}>{l}</button>
+            <button key={p} onClick={() => setPanel(p)} aria-pressed={panel === p} className={`border-b-2 py-3 ${panel === p ? "border-cyan-500 text-cyan-300" : "border-transparent text-slate-500"}`}>{l}</button>
           ))}
         </nav>
 
         <div className={`${panel === "lecture" ? "flex" : "hidden"} min-h-0 flex-1 flex-col lg:flex`}>
           <div ref={listRef} onScroll={onScroll} className="min-h-[50vh] flex-1 space-y-3 overflow-y-auto px-4 py-4 sm:px-6" aria-live="polite" aria-relevant="additions">
             {session.introduction && (
-              <details open={segs.length < 3} className="rounded-xl border border-navy-100 bg-navy-50/60 p-4">
-                <summary className="cursor-pointer text-sm font-semibold text-navy-700">Lesson introduction</summary>
+              <details open={segs.length < 3} className="rounded-xl border border-navy-400/30 bg-navy-400/10 p-4">
+                <summary className="cursor-pointer text-sm font-semibold text-cyan-200">Lesson introduction</summary>
                 <p className="mt-2 text-sm leading-relaxed text-slate-700">{session.introduction}</p>
               </details>
             )}
@@ -192,22 +192,22 @@ export function StudentLecture({ code }: { code: string }) {
               </div>
             )}
             {segs.map((s) => (
-              <article key={s.seq} className={`group rounded-xl border bg-white p-4 transition ${s === latest && session.status === "LIVE" ? "border-cyan-400 shadow-sm" : "border-slate-200"}`}>
+              <article key={s.seq} className={`group rounded-xl border bg-surface p-4 transition ${s === latest && session.status === "LIVE" ? "border-cyan-400 shadow-sm" : "border-slate-200"}`}>
                 {view !== "sw" && <p className={view === "both" ? "text-slate-600" : "text-brand-ink"} style={{ fontSize: view === "both" ? fontPx - 2 : fontPx, lineHeight: 1.55 }}>{s.english}</p>}
                 {view !== "en" && (
-                  <p lang="sw" className={`font-medium text-navy-700 ${view === "both" ? "mt-1.5" : ""}`} style={{ fontSize: fontPx, lineHeight: 1.55 }}>
+                  <p lang="sw" className={`font-medium text-cyan-200 ${view === "both" ? "mt-1.5" : ""}`} style={{ fontSize: fontPx, lineHeight: 1.55 }}>
                     {s.kiswahili ?? <span className="text-sm font-normal italic text-slate-400">Translation unavailable for this statement</span>}
                   </p>
                 )}
                 <div className="mt-2.5 flex flex-wrap items-center gap-1.5">
                   {s.termIds.map((id) => terms[id] && (
-                    <button key={id} onClick={() => { setActiveTerm(id); setPanel("terms"); }} className="rounded-full bg-cyan-50 px-2.5 py-1 text-xs font-medium text-cyan-800 ring-1 ring-cyan-200 hover:bg-cyan-100">
+                    <button key={id} onClick={() => { setActiveTerm(id); setPanel("terms"); }} className="rounded-full bg-cyan-400/10 px-2.5 py-1 text-xs font-medium text-cyan-300 ring-1 ring-cyan-400/40 hover:bg-cyan-400/20">
                       {terms[id].english} → {terms[id].kiswahili}
                     </button>
                   ))}
                   <button
                     onClick={() => setNotes((n) => `${n}${n && !n.endsWith("\n") ? "\n" : ""}• ${s.english}\n  ${s.kiswahili ?? ""}\n`)}
-                    className="ml-auto rounded-md px-2 py-1 text-xs text-slate-500 opacity-100 hover:bg-slate-100 hover:text-navy-600 sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
+                    className="ml-auto rounded-md px-2 py-1 text-xs text-slate-500 opacity-100 hover:bg-slate-100 hover:text-cyan-300 sm:opacity-0 sm:group-hover:opacity-100 sm:focus:opacity-100"
                   >
                     + Add to notes
                   </button>
@@ -222,7 +222,7 @@ export function StudentLecture({ code }: { code: string }) {
             </button>
           )}
           {session.mode === "DEMO" && (
-            <p className="border-t border-amber-200 bg-amber-50 px-4 py-2 text-center text-xs text-amber-900">
+            <p className="border-t border-amber-400/30 bg-amber-400/10 px-4 py-2 text-center text-xs text-amber-200">
               Demonstration session: sample lecture statements and hand-prepared translations, not AI254 system output.
             </p>
           )}
@@ -230,7 +230,7 @@ export function StudentLecture({ code }: { code: string }) {
       </section>
 
       {/* Sidebar */}
-      <aside className={`${panel === "lecture" ? "hidden" : "block"} w-full shrink-0 space-y-4 overflow-y-auto border-l border-slate-200 bg-white p-4 sm:p-5 lg:block lg:w-[380px]`}>
+      <aside className={`${panel === "lecture" ? "hidden" : "block"} w-full shrink-0 space-y-4 overflow-y-auto border-l border-slate-200 bg-surface p-4 sm:p-5 lg:block lg:w-[380px]`}>
         <div className={panel === "ask" ? "" : "hidden lg:block"}>
           <AskPanel join={join} allowMic={session.studentMicEnabled} ended={session.status === "ENDED"} />
         </div>
@@ -252,9 +252,9 @@ export function StudentLecture({ code }: { code: string }) {
 }
 
 function StatusPill({ status, mic }: { status: Session["status"]; mic: boolean }) {
-  if (status === "LIVE" && mic) return <span className="badge bg-emerald-50 text-emerald-800 ring-1 ring-emerald-200"><span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulseDot" />Live</span>;
+  if (status === "LIVE" && mic) return <span className="badge bg-emerald-400/10 text-emerald-300 ring-1 ring-emerald-400/30"><span className="h-2 w-2 rounded-full bg-emerald-500 animate-pulseDot" />Live</span>;
   if (status === "LIVE") return <span className="badge bg-slate-100 text-slate-700">Live · mic off</span>;
-  if (status === "PAUSED") return <span className="badge bg-amber-50 text-amber-800">Paused</span>;
+  if (status === "PAUSED") return <span className="badge bg-amber-400/10 text-amber-200">Paused</span>;
   if (status === "ENDED") return <span className="badge bg-slate-100 text-slate-700">Ended</span>;
   return <span className="badge bg-slate-100 text-slate-700">Not started</span>;
 }
@@ -270,14 +270,14 @@ function TermsPanel({ terms, activeId }: { terms: Term[]; activeId: string | nul
       ) : (
         <ul className="mt-3 space-y-2.5">
           {terms.map((t) => (
-            <li key={t.id} ref={t.id === activeId ? activeRef : undefined} className={`rounded-xl border p-3.5 ${t.id === activeId ? "border-cyan-400 bg-cyan-50" : "border-slate-200"}`}>
+            <li key={t.id} ref={t.id === activeId ? activeRef : undefined} className={`rounded-xl border p-3.5 ${t.id === activeId ? "border-cyan-400 bg-cyan-400/10" : "border-slate-200"}`}>
               <div className="flex flex-wrap items-baseline justify-between gap-x-3">
                 <p className="font-semibold">{t.english}</p>
-                <p className="font-semibold text-navy-700" lang="sw">{t.kiswahili}</p>
+                <p className="font-semibold text-cyan-200" lang="sw">{t.kiswahili}</p>
               </div>
               {t.definitionSw && <p className="mt-1.5 text-sm text-slate-700" lang="sw">{t.definitionSw}</p>}
               {t.definitionEn && <p className="mt-1 text-sm text-slate-500">{t.definitionEn}</p>}
-              {t.usageNote && <p className="mt-2 rounded-md bg-amber-50 px-2.5 py-1.5 text-xs text-amber-900">{t.usageNote}</p>}
+              {t.usageNote && <p className="mt-2 rounded-md bg-amber-400/10 px-2.5 py-1.5 text-xs text-amber-200">{t.usageNote}</p>}
               {t.status === "SAMPLE" && <p className="mt-2 text-[11px] text-slate-400">Sample glossary entry (demonstration)</p>}
             </li>
           ))}
@@ -327,7 +327,7 @@ function AskPanel({ join, allowMic, ended }: { join: StoredJoin; allowMic: boole
       <h2 id="ask-h" className="text-sm font-bold">Ask the lecturer a question</h2>
       <div className="mt-3 flex items-center gap-2">
         <span className="text-xs text-slate-500">Language</span>
-        <div className="flex rounded-lg bg-white p-1 text-xs font-semibold ring-1 ring-slate-200" role="group" aria-label="Question language">
+        <div className="flex rounded-lg bg-surface p-1 text-xs font-semibold ring-1 ring-slate-200" role="group" aria-label="Question language">
           {(["en", "sw"] as const).map((l) => (
             <button key={l} onClick={() => setLang(l)} aria-pressed={lang === l} className={`rounded-md px-3 py-1 ${lang === l ? "bg-navy-500 text-white" : "text-slate-600"}`}>{l === "en" ? "English" : "Kiswahili"}</button>
           ))}
@@ -363,12 +363,12 @@ function AskPanel({ join, allowMic, ended }: { join: StoredJoin; allowMic: boole
       <button onClick={send} disabled={status.kind === "sending" || text.trim().length < 2 || ended} className="btn-primary btn-sm mt-3 w-full">
         {status.kind === "sending" ? "Sending…" : "Send question"}
       </button>
-      {status.msg && <p role="status" className={`mt-2 text-xs ${status.kind === "error" ? "text-red-700" : "text-emerald-700"}`}>{status.msg}</p>}
+      {status.msg && <p role="status" className={`mt-2 text-xs ${status.kind === "error" ? "text-red-300" : "text-emerald-300"}`}>{status.msg}</p>}
       {mine.length > 0 && (
         <ul className="mt-4 space-y-2 border-t border-slate-200 pt-3">
           {mine.map((q) => (
             <li key={q.id} className="text-xs text-slate-600">
-              <span className={`mr-1.5 font-semibold ${q.answered ? "text-emerald-700" : "text-slate-400"}`}>{q.answered ? "✓ Answered" : "Sent"}</span>
+              <span className={`mr-1.5 font-semibold ${q.answered ? "text-emerald-300" : "text-slate-400"}`}>{q.answered ? "✓ Answered" : "Sent"}</span>
               {q.text}
             </li>
           ))}
@@ -392,7 +392,7 @@ function NotesPanel({ notes, setNotes, session }: { notes: string; setNotes: (s:
     <section aria-labelledby="notes-h">
       <div className="flex items-center justify-between">
         <h2 id="notes-h" className="text-sm font-bold">My notes</h2>
-        <button onClick={download} disabled={!notes.trim()} className="text-xs font-semibold text-navy-600 hover:underline disabled:text-slate-300">Download</button>
+        <button onClick={download} disabled={!notes.trim()} className="text-xs font-semibold text-cyan-300 hover:underline disabled:text-slate-300">Download</button>
       </div>
       <textarea value={notes} onChange={(e) => setNotes(e.target.value)} rows={8} className="input mt-2 text-sm" placeholder="Write notes in English or Kiswahili. Use “+ Add to notes” on any statement." aria-label="My notes" />
       <p className="mt-1.5 text-xs text-slate-500">Saved on this device only.</p>
@@ -443,7 +443,7 @@ function Rejoin({ code, left, onJoined }: { code: string; left: boolean; onJoine
         <div className="mt-4 text-left">
           <UniversitySelect id="rejoin-university" choice={uniChoice} other={uniOther} onChoice={setUniChoice} onOther={setUniOther} />
         </div>
-        {err && <p role="alert" className="mt-3 text-sm text-red-700">{err}</p>}
+        {err && <p role="alert" className="mt-3 text-sm text-red-300">{err}</p>}
         <button onClick={go} disabled={busy || adm.trim().length < 3 || university.length < 2} className="btn-primary mt-5 w-full">{busy ? "Joining…" : left ? "Rejoin session" : "Join"}</button>
         <Link href="/live/student" className="mt-4 inline-block text-sm text-slate-500 underline">Choose a different lecture</Link>
       </div>
