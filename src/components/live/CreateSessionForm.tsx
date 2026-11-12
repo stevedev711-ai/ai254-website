@@ -49,13 +49,13 @@ export function CreateSessionForm({ liveAvailable }: { liveAvailable: boolean })
     <form onSubmit={onSubmit} className="mt-6 space-y-4" noValidate>
       {error && <p role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-800">{error}</p>}
       <div>
-        <label htmlFor="title" className="label">Lecture title</label>
-        <input id="title" name="title" className="input" placeholder="e.g. The Cell: Structure and Function" required maxLength={160} aria-invalid={fe.title ? true : undefined} />
+        <label htmlFor="title" className="label">Class</label>
+        <input id="title" name="title" className="input" placeholder="Class topic, e.g. The Cell: Structure and Function" required maxLength={160} aria-invalid={fe.title ? true : undefined} />
         {fe.title && <p className="field-error">{fe.title}</p>}
       </div>
       <div className="grid gap-4 sm:grid-cols-2">
         <div>
-          <label htmlFor="courseCode" className="label">Course code</label>
+          <label htmlFor="courseCode" className="label">Unit code</label>
           <input id="courseCode" name="courseCode" className="input uppercase" placeholder="BIO 101" required maxLength={20} aria-invalid={fe.courseCode ? true : undefined} />
           {fe.courseCode && <p className="field-error">{fe.courseCode}</p>}
         </div>

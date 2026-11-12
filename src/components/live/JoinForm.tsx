@@ -108,14 +108,24 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
         <ul className="mt-2 grid gap-2">
           {sessions?.map((s) => (
             <li key={s.id}>
-              <label className={`flex cursor-pointer items-center gap-3 rounded-xl border p-3.5 transition ${code === s.code ? "border-cyan-500 bg-cyan-50 ring-1 ring-cyan-500" : "border-slate-200 hover:border-slate-300"}`}>
-                <input type="radio" name="session" value={s.code} checked={code === s.code} onChange={() => setCode(s.code)} className="h-4 w-4 accent-cyan-600" />
+              <label className={`flex cursor-pointer items-start gap-3 rounded-xl sm:items-center border p-3.5 transition ${code === s.code ? "border-cyan-500 bg-cyan-50 ring-1 ring-cyan-500" : "border-slate-200 hover:border-slate-300"}`}>
+                <input type="radio" name="session" value={s.code} checked={code === s.code} onChange={() => setCode(s.code)} className="mt-1 h-4 w-4 shrink-0 accent-cyan-600 sm:mt-0" />
                 <span className="min-w-0 flex-1">
-                  <span className="block truncate font-semibold">{s.title}</span>
-                  <span className="block text-xs text-slate-500">
-                    {s.courseCode} · {s.subject}
-                    {s.lecturer ? ` · ${s.lecturer.name}` : ""}
-                  </span>
+                  <dl className="grid grid-cols-1 text-sm sm:grid-cols-[5.5rem_1fr] sm:gap-x-3 sm:gap-y-1">
+                    <dt className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:pt-0.5 sm:text-xs">Class</dt>
+                    <dd className="min-w-0 font-semibold text-brand-ink">{className(s.title)}</dd>
+                    <dt className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:mt-0 sm:pt-0.5 sm:text-xs">Unit code</dt>
+                    <dd className="min-w-0 text-slate-700">
+                      <span className="font-mono font-semibold">{s.courseCode}</span>
+                      <span className="text-slate-500"> · {s.subject}</span>
+                    </dd>
+                    {s.lecturer && (
+                      <>
+                        <dt className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:mt-0 sm:pt-0.5 sm:text-xs">Lecturer</dt>
+                        <dd className="min-w-0 text-slate-700">{s.lecturer.name}</dd>
+                      </>
+                    )}
+                  </dl>
                 </span>
                 <span className="flex shrink-0 flex-col items-end gap-1">
                   {s.mode === "DEMO" && <span className="demo-badge !py-0.5 text-[10px]">Demo</span>}
@@ -145,4 +155,10 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
       </button>
     </form>
   );
+}
+
+/** Class name without a leading "Unit name — " prefix (e.g. "Biology 101 — The Cell" → "The Cell"). */
+function className(title: string) {
+  const i = title.indexOf(" — ");
+  return i > -1 ? title.slice(i + 3) : title;
 }

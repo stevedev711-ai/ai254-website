@@ -9,8 +9,8 @@ import { liveServicesConfigured } from "@/lib/live/services";
 export const runtime = "nodejs";
 
 const schema = z.object({
-  title: z.string().trim().min(3, "Enter a lecture title").max(160),
-  courseCode: z.string().trim().toUpperCase().min(2, "Enter the course code").max(20),
+  title: z.string().trim().min(3, "Enter the class name").max(160),
+  courseCode: z.string().trim().toUpperCase().min(2, "Enter the unit code").max(20),
   subject: z.string().refine((s) => ALL_SUBJECTS.includes(s), "Select a subject"),
   introduction: z.string().trim().max(2000).optional(),
   summary: z.string().trim().max(4000).optional(),
