@@ -2,7 +2,9 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useState, type FormEvent } from "react";
-import { lastAdmission, saveJoin } from "@/lib/live/client";
+import { lastAdmission, lastUniversity, saveJoin } from "@/lib/live/client";
+import { isKnownUniversity, OTHER_UNIVERSITY } from "@/lib/universities";
+import { UniversitySelect, universityValue } from "./UniversitySelect";
 
 type ActiveSession = { id: string; code: string; title: string; courseCode: string; subject: string; status: string; mode: "DEMO" | "LIVE"; lecturer: { name: string } | null };
 
@@ -10,6 +12,8 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
   const router = useRouter();
   const [admission, setAdmission] = useState("");
   const [code, setCode] = useState(initialCode ?? "");
+  const [uniChoice, setUniChoice] = useState("");
+  const [uniOther, setUniOther] = useState("");
   const [sessions, setSessions] = useState<ActiveSession[] | null>(null);
   const [loadError, setLoadError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -18,6 +22,14 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
 
   useEffect(() => {
     setAdmission(lastAdmission());
+    const savedUni = lastUniversity();
+    if (savedUni) {
+      if (isKnownUniversity(savedUni)) setUniChoice(savedUni);
+      else {
+        setUniChoice(OTHER_UNIVERSITY);
+        setUniOther(savedUni);
+      }
+    }
     const load = () =>
       fetch("/api/live/sessions")
         .then((r) => r.json())
@@ -36,6 +48,9 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
     if (busy) return;
     const errs: Record<string, string> = {};
     if (admission.trim().length < 3) errs.admissionNumber = "Enter your admission number";
+    const university = universityValue(uniChoice, uniOther);
+    if (!uniChoice) errs.university = "Select your university";
+    else if (university.length < 2) errs.university = "Type the name of your university";
     if (code.trim().length < 4) errs.code = "Choose a lecture or enter the session code";
     setErrors(errs);
     setError("");
@@ -45,7 +60,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
       const res = await fetch("/api/live/sessions/join", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ code: code.trim(), admissionNumber: admission.trim() }),
+        body: JSON.stringify({ code: code.trim(), admissionNumber: admission.trim(), university }),
       });
       const d = await res.json().catch(() => ({}));
       if (!res.ok || !d.ok) {
@@ -53,7 +68,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
         setError(d.error ?? "Could not join the lecture.");
         return;
       }
-      saveJoin(d.session.code, { token: d.token, sessionId: d.session.id, admissionNumber: d.admissionNumber });
+      saveJoin(d.session.code, { token: d.token, sessionId: d.session.id, admissionNumber: d.admissionNumber, university: d.university });
       router.push(`/live/student/${d.session.code}`);
     } catch {
       setError("Could not reach the server. Check your connection and try again.");
@@ -77,8 +92,11 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
           aria-invalid={errors.admissionNumber ? true : undefined}
           aria-describedby="adm-help"
         />
-        <p id="adm-help" className="mt-1.5 text-xs text-slate-500">Used only to record your attendance in this session. No password is needed.</p>
+        <p id="adm-help" className="mt-1.5 text-xs text-slate-500">Used with your university only to record your attendance in this session. No password is needed.</p>
         {errors.admissionNumber && <p className="field-error">{errors.admissionNumber}</p>}
+        <div className="mt-5">
+          <UniversitySelect choice={uniChoice} other={uniOther} onChoice={setUniChoice} onOther={setUniOther} error={errors.university} />
+        </div>
       </div>
 
       <fieldset className="card p-5 sm:p-6">

@@ -2,7 +2,9 @@
 
 import Link from "next/link";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { clearJoin, lastAdmission, loadJoin, saveJoin, type StoredJoin } from "@/lib/live/client";
+import { clearJoin, lastAdmission, lastUniversity, loadJoin, saveJoin, type StoredJoin } from "@/lib/live/client";
+import { isKnownUniversity, OTHER_UNIVERSITY } from "@/lib/universities";
+import { UniversitySelect, universityValue } from "./UniversitySelect";
 import { useSpeechInput } from "./useSpeechInput";
 
 type Session = {
@@ -400,18 +402,32 @@ function NotesPanel({ notes, setNotes, session }: { notes: string; setNotes: (s:
 
 function Rejoin({ code, left, onJoined }: { code: string; left: boolean; onJoined: (j: StoredJoin) => void }) {
   const [adm, setAdm] = useState("");
+  const [uniChoice, setUniChoice] = useState("");
+  const [uniOther, setUniOther] = useState("");
   const [err, setErr] = useState("");
   const [busy, setBusy] = useState(false);
-  useEffect(() => setAdm(lastAdmission()), []);
+  useEffect(() => {
+    setAdm(lastAdmission());
+    const saved = lastUniversity();
+    if (saved) {
+      if (isKnownUniversity(saved)) setUniChoice(saved);
+      else {
+        setUniChoice(OTHER_UNIVERSITY);
+        setUniOther(saved);
+      }
+    }
+  }, []);
+  const university = universityValue(uniChoice, uniOther);
   async function go() {
     if (busy) return;
+    if (university.length < 2) return setErr("Select your university.");
     setBusy(true);
     setErr("");
-    const r = await fetch("/api/live/sessions/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, admissionNumber: adm }) }).catch(() => null);
+    const r = await fetch("/api/live/sessions/join", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ code, admissionNumber: adm, university }) }).catch(() => null);
     const d = await r?.json().catch(() => null);
     setBusy(false);
     if (!d?.ok) return setErr(d?.error ?? "Could not join.");
-    const j = { token: d.token, sessionId: d.session.id, admissionNumber: d.admissionNumber };
+    const j = { token: d.token, sessionId: d.session.id, admissionNumber: d.admissionNumber, university: d.university };
     saveJoin(code, j);
     onJoined(j);
   }
@@ -424,8 +440,11 @@ function Rejoin({ code, left, onJoined }: { code: string; left: boolean; onJoine
           <label htmlFor="adm" className="label">Admission number</label>
           <input id="adm" className="input font-mono uppercase placeholder:normal-case" value={adm} onChange={(e) => setAdm(e.target.value)} onKeyDown={(e) => e.key === "Enter" && go()} />
         </div>
+        <div className="mt-4 text-left">
+          <UniversitySelect id="rejoin-university" choice={uniChoice} other={uniOther} onChoice={setUniChoice} onOther={setUniOther} />
+        </div>
         {err && <p role="alert" className="mt-3 text-sm text-red-700">{err}</p>}
-        <button onClick={go} disabled={busy || adm.trim().length < 3} className="btn-primary mt-5 w-full">{busy ? "Joining…" : left ? "Rejoin session" : "Join"}</button>
+        <button onClick={go} disabled={busy || adm.trim().length < 3 || university.length < 2} className="btn-primary mt-5 w-full">{busy ? "Joining…" : left ? "Rejoin session" : "Join"}</button>
         <Link href="/live/student" className="mt-4 inline-block text-sm text-slate-500 underline">Choose a different lecture</Link>
       </div>
     </main>

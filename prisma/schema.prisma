@@ -182,6 +182,7 @@ model Participant {
   sessionId       String
   session         LectureSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   admissionNumber String
+  university      String?
   joinedAt        DateTime       @default(now())
   lastSeenAt      DateTime       @default(now())
   leftAt          DateTime?
@@ -194,6 +195,7 @@ model Question {
   sessionId       String
   session         LectureSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
   admissionNumber String
+  university      String?
   language        String // "en" | "sw"
   text            String
   answered        Boolean        @default(false)

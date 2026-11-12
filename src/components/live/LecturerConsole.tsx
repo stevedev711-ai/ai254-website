@@ -20,7 +20,7 @@ type Session = {
   endedAt: string | null;
 };
 type Seg = { seq: number; english: string; kiswahili: string | null; source: string; at: string };
-type Q = { id: string; admissionNumber: string; language: string; text: string; answered: boolean; createdAt: string };
+type Q = { id: string; admissionNumber: string; university: string | null; language: string; text: string; answered: boolean; createdAt: string };
 
 export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initial: Session; joinUrl: string; qr: string; liveAvailable: boolean }) {
   const [session, setSession] = useState<Session>(initial);
@@ -197,7 +197,7 @@ export function LecturerConsole({ initial, joinUrl, qr, liveAvailable }: { initi
                   <li key={q.id} className={`rounded-lg border p-3 text-sm ${q.answered ? "border-slate-100 bg-slate-50 text-slate-500" : "border-slate-200"}`}>
                     <p lang={q.language}>{q.text}</p>
                     <div className="mt-1.5 flex items-center justify-between text-xs text-slate-500">
-                      <span>{q.admissionNumber} · {q.language === "sw" ? "Kiswahili" : "English"} · {new Date(q.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
+                      <span>{q.admissionNumber}{q.university ? ` · ${q.university}` : ""} · {q.language === "sw" ? "Kiswahili" : "English"} · {new Date(q.createdAt).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</span>
                       <button onClick={() => markAnswered(q)} className="font-semibold text-navy-600 hover:underline">{q.answered ? "Reopen" : "Mark answered"}</button>
                     </div>
                   </li>

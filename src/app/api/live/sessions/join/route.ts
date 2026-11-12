@@ -11,6 +11,7 @@ export const runtime = "nodejs";
 const schema = z.object({
   code: z.string().trim().toUpperCase().min(4, "Enter the session code").max(12),
   admissionNumber: admissionSchema,
+  university: z.string({ required_error: "Select your university" }).trim().min(2, "Select your university").max(160),
 });
 
 export async function POST(req: Request) {
@@ -18,7 +19,7 @@ export async function POST(req: Request) {
   if (!memoryRateLimit(`join:${hashIp(clientIp(req))}`, 40, 10 * 60 * 1000)) return fail(429, "Too many attempts. Please wait a few minutes.");
   const parsed = schema.safeParse(await req.json().catch(() => null));
   if (!parsed.success) return fail(422, "Please check the details you entered.", zodFieldErrors(parsed.error));
-  const { code, admissionNumber } = parsed.data;
+  const { code, admissionNumber, university } = parsed.data;
 
   const session = await prisma.lectureSession.findUnique({ where: { code }, select: publicSessionSelect });
   if (!session) return fail(404, "No lecture was found with that session code. Check the code shown by your lecturer.", { code: "Session code not found" });
@@ -27,9 +28,9 @@ export async function POST(req: Request) {
 
   const participant = await prisma.participant.upsert({
     where: { sessionId_admissionNumber: { sessionId: session.id, admissionNumber } },
-    update: { leftAt: null, lastSeenAt: new Date() },
-    create: { sessionId: session.id, admissionNumber },
+    update: { leftAt: null, lastSeenAt: new Date(), university },
+    create: { sessionId: session.id, admissionNumber, university },
   });
   const token = await signParticipant(participant.id, session.id);
-  return json({ ok: true, token, session, admissionNumber });
+  return json({ ok: true, token, session, admissionNumber, university });
 }

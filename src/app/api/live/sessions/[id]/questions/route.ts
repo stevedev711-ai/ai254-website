@@ -18,7 +18,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (!parsed.success) return fail(422, "Please check your question.", zodFieldErrors(parsed.error));
   const p = await prisma.participant.findUnique({ where: { id: access.participantId } });
   if (!p) return fail(401, "Rejoin the session.");
-  const q = await prisma.question.create({ data: { sessionId: id, admissionNumber: p.admissionNumber, ...parsed.data } });
+  const q = await prisma.question.create({ data: { sessionId: id, admissionNumber: p.admissionNumber, university: p.university, ...parsed.data } });
   return json({ ok: true, id: q.id }, 201);
 }
 

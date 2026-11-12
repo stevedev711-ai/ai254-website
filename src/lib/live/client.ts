@@ -3,12 +3,13 @@
 /** Client helpers for the student session token (kept per browser tab session). */
 const key = (code: string) => `ai254.live.${code}`;
 
-export type StoredJoin = { token: string; sessionId: string; admissionNumber: string };
+export type StoredJoin = { token: string; sessionId: string; admissionNumber: string; university?: string };
 
 export function saveJoin(code: string, data: StoredJoin) {
   try {
     sessionStorage.setItem(key(code), JSON.stringify(data));
     localStorage.setItem("ai254.live.admission", data.admissionNumber);
+    if (data.university) localStorage.setItem("ai254.live.university", data.university);
   } catch {}
 }
 export function loadJoin(code: string): StoredJoin | null {
@@ -27,6 +28,13 @@ export function clearJoin(code: string) {
 export function lastAdmission() {
   try {
     return localStorage.getItem("ai254.live.admission") ?? "";
+  } catch {
+    return "";
+  }
+}
+export function lastUniversity() {
+  try {
+    return localStorage.getItem("ai254.live.university") ?? "";
   } catch {
     return "";
   }
