@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { PageHeader } from "@/components/site/PageHeader";
+import { HowItRunsVisual } from "@/components/site/HowItRunsVisual";
 import { CtaBand } from "@/components/site/CtaBand";
 
 export const metadata: Metadata = {
@@ -52,6 +53,7 @@ export default function WhatWeDoPage() {
         eyebrow="What We Do"
         title="Speech, language and classroom work, developed together"
         intro="AI254’s work covers the full path of a lecture: capturing what the lecturer says, translating it with the correct scientific meaning, delivering it to students during the lecture, and checking how well it works."
+        visual={<HowItRunsVisual />}
       />
 
       <div className="container-x grid gap-12 py-16 lg:grid-cols-[240px_1fr]">
