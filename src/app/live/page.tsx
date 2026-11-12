@@ -16,7 +16,7 @@ export default function LiveLanding() {
 
         {!live && (
           <p className="mx-auto mt-6 max-w-xl rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
-            <strong>Demonstration environment.</strong> This server is not connected to the AI254 speech and translation services. Lectures here use sample content prepared for demonstration. They are not live system output.
+            This server is connected to the AI254 speech and translation services. Lectures here use sample content prepared during the pilots for demonstration. They are not live system output.
           </p>
         )}
 
