@@ -1,0 +1,241 @@
+// AI254 database schema (PostgreSQL)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Accounts
+// ---------------------------------------------------------------------------
+
+enum Role {
+  LECTURER
+  ADMIN
+}
+
+model User {
+  id           String    @id @default(cuid())
+  email        String    @unique
+  name         String
+  passwordHash String
+  role         Role      @default(LECTURER)
+  department   String?
+  active       Boolean   @default(true)
+  lastLoginAt  DateTime?
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+
+  sessions LectureSession[]
+}
+
+// ---------------------------------------------------------------------------
+// Website forms
+// ---------------------------------------------------------------------------
+
+enum RequestStatus {
+  NEW
+  IN_REVIEW
+  CONTACTED
+  SCHEDULED
+  COMPLETED
+  CLOSED
+}
+
+enum EmailStatus {
+  PENDING
+  SENT
+  FAILED
+  NOT_CONFIGURED
+}
+
+model DemoRequest {
+  id                String        @id @default(cuid())
+  idempotencyKey    String        @unique
+  fullName          String
+  email             String
+  phone             String?
+  organisation      String
+  jobTitle          String?
+  country           String?
+  organisationType  String?
+  areaOfInterest    String?
+  preferredDate     DateTime?     @db.Date
+  preferredTime     String?
+  expectedAttendees Int?
+  message           String?
+  consent           Boolean
+  status            RequestStatus @default(NEW)
+  adminNotes        String?
+  notifyStatus      EmailStatus   @default(PENDING)
+  ackStatus         EmailStatus   @default(PENDING)
+  ipHash            String?
+  userAgent         String?
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+
+  @@index([email, createdAt])
+  @@index([ipHash, createdAt])
+  @@index([status])
+}
+
+model ContactMessage {
+  id             String        @id @default(cuid())
+  idempotencyKey String        @unique
+  name           String
+  email          String
+  subject        String
+  message        String
+  status         RequestStatus @default(NEW)
+  notifyStatus   EmailStatus   @default(PENDING)
+  ipHash         String?
+  createdAt      DateTime      @default(now())
+
+  @@index([ipHash, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Organisation content
+// ---------------------------------------------------------------------------
+
+model TeamMember {
+  id        String   @id @default(cuid())
+  name      String
+  role      String
+  bio       String?
+  photoUrl  String?
+  sortOrder Int      @default(0)
+  published Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// AI254 LIVE
+// ---------------------------------------------------------------------------
+
+enum SessionStatus {
+  SCHEDULED // created, not yet started
+  LIVE // capturing and publishing
+  PAUSED // stopped temporarily by lecturer
+  ENDED
+}
+
+/// DEMO = scripted sample content, LIVE = output from connected AI254 services
+enum ProcessingMode {
+  DEMO
+  LIVE
+}
+
+model LectureSession {
+  id           String         @id @default(cuid())
+  code         String         @unique // 6-char join code
+  title        String
+  courseCode   String
+  subject      String
+  introduction String?
+  summary      String?
+  status       SessionStatus  @default(SCHEDULED)
+  mode         ProcessingMode @default(DEMO)
+  micEnabled   Boolean        @default(false) // lecturer audio capture
+  studentMicEnabled Boolean   @default(true)  // students may ask spoken questions
+  demoScriptId String?
+  demoCursor   Int            @default(0)
+  lecturerId   String?
+  lecturer     User?          @relation(fields: [lecturerId], references: [id], onDelete: SetNull)
+  startedAt    DateTime?
+  endedAt      DateTime?
+  createdAt    DateTime       @default(now())
+  updatedAt    DateTime       @updatedAt
+
+  segments     Segment[]
+  participants Participant[]
+  questions    Question[]
+
+  @@index([status])
+}
+
+model Segment {
+  id          String         @id @default(cuid())
+  sessionId   String
+  session     LectureSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  seq         Int
+  english     String
+  kiswahili   String?
+  termIds     String[]       @default([])
+  source      ProcessingMode
+  asrMs       Int? // speech recognition time reported by service
+  translateMs Int? // translation time reported by service
+  createdAt   DateTime       @default(now())
+
+  @@unique([sessionId, seq])
+}
+
+model Participant {
+  id              String         @id @default(cuid())
+  sessionId       String
+  session         LectureSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  admissionNumber String
+  joinedAt        DateTime       @default(now())
+  lastSeenAt      DateTime       @default(now())
+  leftAt          DateTime?
+
+  @@unique([sessionId, admissionNumber])
+}
+
+model Question {
+  id              String         @id @default(cuid())
+  sessionId       String
+  session         LectureSession @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  admissionNumber String
+  language        String // "en" | "sw"
+  text            String
+  answered        Boolean        @default(false)
+  createdAt       DateTime       @default(now())
+}
+
+enum TermStatus {
+  SAMPLE // illustrative entry, not part of the reviewed glossary
+  DRAFT
+  IN_REVIEW
+  REVIEWED
+}
+
+model Term {
+  id           String     @id @default(cuid())
+  subject      String
+  english      String
+  kiswahili    String
+  definitionEn String?
+  definitionSw String?
+  usageNote    String?
+  status       TermStatus @default(DRAFT)
+  reviewedBy   String?
+  createdAt    DateTime   @default(now())
+  updatedAt    DateTime   @updatedAt
+
+  @@unique([subject, english])
+}
+
+enum LogLevel {
+  INFO
+  WARN
+  ERROR
+}
+
+model SystemLog {
+  id        String   @id @default(cuid())
+  level     LogLevel @default(INFO)
+  source    String // e.g. "asr", "translation", "email", "api"
+  message   String
+  meta      Json?
+  sessionId String?
+  createdAt DateTime @default(now())
+
+  @@index([level, createdAt])
+  @@index([source, createdAt])
+}
