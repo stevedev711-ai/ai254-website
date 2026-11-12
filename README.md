@@ -67,7 +67,7 @@ The demo-request and contact forms work as follows:
 ## Deploying to Vercel
 
 1. In Vercel, choose **Add New → Project** and import `stevedev711-ai/ai254-website`. Framework: Next.js; keep the defaults. The `vercel-build` script runs automatically.
-2. Under **Storage**, add a Postgres database (Neon) and connect it to the project. Then set `DIRECT_DATABASE_URL` to the database's *unpooled* URL (Neon provides `DATABASE_URL_UNPOOLED`).
+2. Under **Storage**, add a Postgres database (Neon) and connect it to the project. The build uses Neon's `DATABASE_URL_UNPOOLED` for migrations automatically.
 3. Add the environment variables from `.env.example`. At minimum set `AUTH_SECRET`, `IP_HASH_SALT`, `NEXT_PUBLIC_SITE_URL`, `SEED_ADMIN_EMAIL`, `SEED_ADMIN_PASSWORD` and `SEED_ADMIN_NAME`, plus `SMTP_*` for email.
 4. Deploy. Each build applies pending migrations (`prisma migrate deploy`) and runs the seed, which is safe to repeat: it creates the first administrator only if that account does not exist yet.
 
