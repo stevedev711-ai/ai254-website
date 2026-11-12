@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState, type FormEvent } from "react";
+import { useEffect, useMemo, useState, type FormEvent } from "react";
 import { lastAdmission, lastUniversity, saveJoin } from "@/lib/live/client";
 import { isKnownUniversity, OTHER_UNIVERSITY } from "@/lib/universities";
 import { UniversitySelect, universityValue } from "./UniversitySelect";
@@ -15,6 +15,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
   const [uniChoice, setUniChoice] = useState("");
   const [uniOther, setUniOther] = useState("");
   const [sessions, setSessions] = useState<ActiveSession[] | null>(null);
+  const [classChoice, setClassChoice] = useState("");
   const [loadError, setLoadError] = useState("");
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [error, setError] = useState("");
@@ -43,6 +44,23 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
     return () => clearInterval(t);
   }, []);
 
+  // Classes (subjects) with live units, and the units in the chosen class
+  const classes = useMemo(() => {
+    const counts = new Map<string, number>();
+    for (const s of sessions ?? []) counts.set(s.subject, (counts.get(s.subject) ?? 0) + 1);
+    return [...counts.entries()].sort((a, b) => a[0].localeCompare(b[0]));
+  }, [sessions]);
+  const unitsInClass = useMemo(
+    () => (sessions ?? []).filter((s) => s.subject === classChoice).sort((a, b) => a.courseCode.localeCompare(b.courseCode)),
+    [sessions, classChoice],
+  );
+  const selected = sessions?.find((s) => s.code === code.trim().toUpperCase());
+
+  // A QR link or typed code pre-selects the matching class
+  useEffect(() => {
+    if (selected && selected.subject !== classChoice) setClassChoice(selected.subject);
+  }, [selected, classChoice]);
+
   async function onSubmit(e: FormEvent) {
     e.preventDefault();
     if (busy) return;
@@ -51,7 +69,7 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
     const university = universityValue(uniChoice, uniOther);
     if (!uniChoice) errs.university = "Select your university";
     else if (university.length < 2) errs.university = "Type the name of your university";
-    if (code.trim().length < 4) errs.code = "Choose a lecture or enter the session code";
+    if (code.trim().length < 4) errs.code = "Choose a class and unit, or enter the session code";
     setErrors(errs);
     setError("");
     if (Object.keys(errs).length) return;
@@ -101,40 +119,75 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
 
       <fieldset className="card p-5 sm:p-6">
         <legend className="sr-only">Choose a lecture</legend>
-        <p className="label">Join an active lecture</p>
+        <p className="text-base font-bold">Join an active lecture</p>
+        <p className="mt-1 text-sm text-slate-500">Choose your class, then the unit being taught.</p>
         {sessions === null && !loadError && <p className="py-4 text-sm text-slate-500">Loading active lectures…</p>}
         {loadError && <p className="py-2 text-sm text-amber-800">{loadError}</p>}
         {sessions?.length === 0 && <p className="py-4 text-sm text-slate-500">No lectures are live right now. Enter a code below if your lecturer has given you one.</p>}
-        <ul className="mt-2 grid gap-2">
-          {sessions?.map((s) => (
-            <li key={s.id}>
-              <label className={`flex cursor-pointer items-start gap-3 rounded-xl sm:items-center border p-3.5 transition ${code === s.code ? "border-cyan-500 bg-cyan-50 ring-1 ring-cyan-500" : "border-slate-200 hover:border-slate-300"}`}>
-                <input type="radio" name="session" value={s.code} checked={code === s.code} onChange={() => setCode(s.code)} className="mt-1 h-4 w-4 shrink-0 accent-cyan-600 sm:mt-0" />
-                <span className="min-w-0 flex-1">
-                  <dl className="grid grid-cols-1 text-sm sm:grid-cols-[5.5rem_1fr] sm:gap-x-3 sm:gap-y-1">
-                    <dt className="text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:pt-0.5 sm:text-xs">Class</dt>
-                    <dd className="min-w-0 font-semibold text-brand-ink">{className(s.title)}</dd>
-                    <dt className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:mt-0 sm:pt-0.5 sm:text-xs">Unit code</dt>
-                    <dd className="min-w-0 text-slate-700">
-                      <span className="font-mono font-semibold">{s.courseCode}</span>
-                      <span className="text-slate-500"> · {s.subject}</span>
-                    </dd>
-                    {s.lecturer && (
-                      <>
-                        <dt className="mt-2 text-[11px] font-semibold uppercase tracking-wider text-slate-500 sm:mt-0 sm:pt-0.5 sm:text-xs">Lecturer</dt>
-                        <dd className="min-w-0 text-slate-700">{s.lecturer.name}</dd>
-                      </>
-                    )}
-                  </dl>
-                </span>
-                <span className="flex shrink-0 flex-col items-end gap-1">
-                  {s.mode === "DEMO" && <span className="demo-badge !py-0.5 text-[10px]">Demo</span>}
-                  <span className={`text-xs font-medium ${s.status === "LIVE" ? "text-emerald-700" : "text-amber-700"}`}>{s.status === "LIVE" ? "● Live" : "Paused"}</span>
-                </span>
-              </label>
-            </li>
-          ))}
-        </ul>
+        {sessions && sessions.length > 0 && (
+          <div className="mt-4 grid gap-4 sm:grid-cols-2">
+            <div>
+              <label htmlFor="class" className="label">Class</label>
+              <select
+                id="class"
+                className="input"
+                value={classChoice}
+                onChange={(e) => {
+                  setClassChoice(e.target.value);
+                  const units = sessions.filter((s) => s.subject === e.target.value);
+                  setCode(units.length === 1 ? units[0].code : "");
+                }}
+              >
+                <option value="">Select a class…</option>
+                {classes.map(([subject, n]) => (
+                  <option key={subject} value={subject}>
+                    {subject} ({n} {n === 1 ? "unit" : "units"})
+                  </option>
+                ))}
+              </select>
+            </div>
+            <div>
+              <label htmlFor="unit" className="label">Unit</label>
+              <select
+                id="unit"
+                className="input"
+                value={unitsInClass.some((s) => s.code === code) ? code : ""}
+                onChange={(e) => setCode(e.target.value)}
+                disabled={!classChoice}
+                aria-invalid={errors.code ? true : undefined}
+              >
+                <option value="">{classChoice ? "Select a unit…" : "Choose a class first"}</option>
+                {unitsInClass.map((s) => (
+                  <option key={s.id} value={s.code}>
+                    {s.courseCode} — {unitName(s.title)}
+                    {s.status === "PAUSED" ? " (paused)" : ""}
+                    {s.mode === "DEMO" ? " · Demo" : ""}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+        )}
+        {selected && (
+          <div className="mt-4 flex items-start justify-between gap-3 rounded-xl border border-cyan-300 bg-cyan-50/60 p-4 text-sm" aria-live="polite">
+            <dl className="grid grid-cols-[5.5rem_1fr] gap-x-3 gap-y-1">
+              <dt className="text-xs font-semibold uppercase tracking-wider text-slate-500">Class</dt>
+              <dd className="font-semibold">{selected.subject}</dd>
+              <dt className="text-xs font-semibold uppercase tracking-wider text-slate-500">Unit</dt>
+              <dd><span className="font-mono font-semibold">{selected.courseCode}</span> — {unitName(selected.title)}</dd>
+              {selected.lecturer && (
+                <>
+                  <dt className="text-xs font-semibold uppercase tracking-wider text-slate-500">Lecturer</dt>
+                  <dd>{selected.lecturer.name}</dd>
+                </>
+              )}
+            </dl>
+            <span className="flex shrink-0 flex-col items-end gap-1">
+              {selected.mode === "DEMO" && <span className="demo-badge !py-0.5 text-[10px]">Demo</span>}
+              <span className={`text-xs font-medium ${selected.status === "LIVE" ? "text-emerald-700" : "text-amber-700"}`}>{selected.status === "LIVE" ? "● Live" : "Paused"}</span>
+            </span>
+          </div>
+        )}
         <div className="mt-5 border-t border-slate-100 pt-5">
           <label htmlFor="code" className="label">Or enter a session code</label>
           <input
@@ -157,8 +210,8 @@ export function JoinForm({ initialCode }: { initialCode?: string }) {
   );
 }
 
-/** Class name without a leading "Unit name — " prefix (e.g. "Biology 101 — The Cell" → "The Cell"). */
-function className(title: string) {
+/** Unit title without a leading "Course name — " prefix (e.g. "Biology 101 — The Cell" → "The Cell"). */
+function unitName(title: string) {
   const i = title.indexOf(" — ");
   return i > -1 ? title.slice(i + 3) : title;
 }
