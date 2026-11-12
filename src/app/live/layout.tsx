@@ -16,7 +16,7 @@ export default async function LiveLayout({ children }: { children: React.ReactNo
     <div className="flex min-h-screen flex-col bg-slate-50">
       <header className="sticky top-0 z-40 border-b border-slate-200 bg-white">
         <div className="mx-auto flex h-14 max-w-[1400px] items-center justify-between gap-3 px-4 sm:px-6">
-          <Link href="/live" aria-label="AI254 LIVE home">
+          <Link href="/" aria-label="AI254 home">
             <Logo suffix="LIVE" />
           </Link>
           <div className="flex items-center gap-2 text-sm">
