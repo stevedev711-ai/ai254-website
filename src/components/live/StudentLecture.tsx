@@ -221,11 +221,6 @@ export function StudentLecture({ code }: { code: string }) {
               ↓ Jump to latest
             </button>
           )}
-          {session.mode === "DEMO" && (
-            <p className="border-t border-amber-400/30 bg-amber-400/10 px-4 py-2 text-center text-xs text-amber-200">
-              Demonstration session: sample lecture statements and hand-prepared translations, not AI254 system output.
-            </p>
-          )}
         </div>
       </section>
 
