@@ -19,8 +19,10 @@ export async function GET(req: Request, { params }: { params: Promise<{ id: stri
 
   if (access.kind === "student") {
     const p = await prisma.participant.findUnique({ where: { id: access.participantId } });
-    if (!p || p.leftAt) return fail(401, "You have left this session. Rejoin to continue.");
-    await prisma.participant.update({ where: { id: p.id }, data: { lastSeenAt: new Date() } });
+    if (!p) return fail(401, "Join the session to view the lecture.");
+    // A finished lecture stays readable (summary, statements) for students who attended it.
+    if (p.leftAt && raw.status !== "ENDED") return fail(401, "You have left this session. Rejoin to continue.");
+    if (!p.leftAt) await prisma.participant.update({ where: { id: p.id }, data: { lastSeenAt: new Date() } });
   }
 
   await advanceDemo(raw);

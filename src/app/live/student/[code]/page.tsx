@@ -4,5 +4,5 @@ export const metadata = { title: "Lecture", robots: { index: false } };
 
 export default async function StudentLecturePage({ params }: { params: Promise<{ code: string }> }) {
   const { code } = await params;
-  return <StudentLecture code={code.toUpperCase()} />;
+  return <StudentLecture key={code.toUpperCase()} code={code.toUpperCase()} />;
 }

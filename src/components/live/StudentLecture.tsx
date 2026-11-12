@@ -6,6 +6,7 @@ import { clearJoin, lastAdmission, lastUniversity, loadJoin, saveJoin, type Stor
 import { isKnownUniversity, OTHER_UNIVERSITY } from "@/lib/universities";
 import { UniversitySelect, universityValue } from "./UniversitySelect";
 import { useSpeechInput } from "./useSpeechInput";
+import { LectureEnded } from "./LectureEnded";
 
 type Session = {
   id: string;
@@ -162,7 +163,11 @@ export function StudentLecture({ code }: { code: string }) {
               <button className="rounded-md px-2.5 py-1.5 disabled:opacity-40" onClick={() => setSize((s) => Math.max(0, s - 1))} disabled={size === 0} aria-label="Smaller text">A−</button>
               <button className="rounded-md px-2.5 py-1.5 disabled:opacity-40" onClick={() => setSize((s) => Math.min(3, s + 1))} disabled={size === 3} aria-label="Larger text">A+</button>
             </div>
-            <button onClick={leave} className="btn-outline btn-sm ml-auto">Leave session</button>
+            {session.status === "ENDED" ? (
+              <Link href="/live/student" className="btn-outline btn-sm ml-auto">Choose another lecture</Link>
+            ) : (
+              <button onClick={leave} className="btn-outline btn-sm ml-auto">Leave session</button>
+            )}
           </div>
         </div>
 
@@ -181,7 +186,7 @@ export function StudentLecture({ code }: { code: string }) {
                 <p className="mt-2 text-sm leading-relaxed text-slate-700">{session.introduction}</p>
               </details>
             )}
-            {segs.length === 0 && (
+            {segs.length === 0 && session.status !== "ENDED" && (
               <div className="rounded-xl border border-dashed border-slate-300 p-8 text-center text-sm text-slate-500">
                 {session.status === "PAUSED" ? "The lecturer has paused the session." : !session.micEnabled ? "The lecturer's microphone is off. Statements will appear here when capture resumes." : "Waiting for the lecturer… statements will appear here as they are spoken."}
               </div>
@@ -209,12 +214,7 @@ export function StudentLecture({ code }: { code: string }) {
                 </div>
               </article>
             ))}
-            {session.status === "ENDED" && (
-              <div className="rounded-xl border border-emerald-200 bg-emerald-50 p-5">
-                <p className="font-semibold text-emerald-900">The lecture has ended</p>
-                {session.summary && <p className="mt-2 text-sm leading-relaxed text-emerald-900/90"><strong>Summary:</strong> {session.summary}</p>}
-              </div>
-            )}
+            {session.status === "ENDED" && <LectureEnded session={session} join={join} />}
           </div>
           {!follow && (
             <button onClick={() => { setFollow(true); listRef.current?.lastElementChild?.scrollIntoView({ behavior: "smooth" }); }} className="btn-cyan btn-sm mx-auto mb-3 shadow-lg">
