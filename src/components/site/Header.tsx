@@ -31,13 +31,15 @@ export function Header() {
           <Logo />
         </Link>
 
-        <nav aria-label="Main" className="hidden items-center gap-1 lg:flex">
+        <nav aria-label="Main" className="hidden items-center gap-1.5 lg:flex">
           {nav.map((item) => (
             <Link
               key={item.href}
               href={item.href}
               aria-current={isActive(item.href) ? "page" : undefined}
-              className={`rounded-md px-3 py-2 text-sm font-medium transition-colors ${isActive(item.href) ? "text-navy-500" : "text-slate-600 hover:text-brand-ink"}`}
+              className={`whitespace-nowrap rounded-lg px-3 py-2 text-[13px] font-semibold text-white shadow-sm shadow-navy-900/20 transition-all duration-150 hover:-translate-y-px hover:shadow-md focus-visible:ring-2 focus-visible:ring-cyan-400 focus-visible:ring-offset-2 xl:px-3.5 xl:text-sm ${
+                isActive(item.href) ? "bg-navy-700 ring-2 ring-cyan-400 ring-offset-2" : "bg-navy-500 hover:bg-navy-600"
+              }`}
             >
               {item.label}
             </Link>
@@ -45,8 +47,8 @@ export function Header() {
         </nav>
 
         <div className="flex items-center gap-2">
-          <Link href="/live" className="btn-primary px-4 py-2.5">
-            <span className="h-2 w-2 rounded-full bg-cyan-300 animate-pulseDot" aria-hidden />
+          <Link href="/live" className="btn whitespace-nowrap bg-brand-gradient px-4 py-2.5 text-white shadow-md shadow-cyan-900/20 transition-all hover:-translate-y-px hover:shadow-lg hover:brightness-110">
+            <span className="h-2 w-2 rounded-full bg-white animate-pulseDot" aria-hidden />
             Our Tech
           </Link>
           <button
@@ -66,20 +68,22 @@ export function Header() {
 
       {open && (
         <nav id="mobile-nav" aria-label="Mobile" className="border-t border-slate-200 bg-white lg:hidden">
-          <ul className="container-x py-3">
+          <ul className="container-x grid gap-2 py-4">
             {nav.map((item) => (
               <li key={item.href}>
                 <Link
                   href={item.href}
                   aria-current={isActive(item.href) ? "page" : undefined}
-                  className={`block rounded-md px-3 py-3 text-base font-medium ${isActive(item.href) ? "bg-navy-50 text-navy-500" : "text-slate-700"}`}
+                  className={`block rounded-lg px-4 py-3 text-base font-semibold text-white shadow-sm shadow-navy-900/20 transition-colors ${
+                    isActive(item.href) ? "bg-navy-700 ring-2 ring-cyan-400 ring-offset-2" : "bg-navy-500 active:bg-navy-600"
+                  }`}
                 >
                   {item.label}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href="/live" className="block rounded-md px-3 py-3 text-base font-semibold text-cyan-700">
+              <Link href="/live" className="block rounded-lg bg-brand-gradient px-4 py-3 text-base font-semibold text-white shadow-sm">
                 AI254 LIVE →
               </Link>
             </li>
