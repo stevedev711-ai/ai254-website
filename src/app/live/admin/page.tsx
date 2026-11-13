@@ -8,6 +8,7 @@ import { liveServicesConfigured } from "@/lib/live/services";
 import { CONNECTED_WINDOW_MS } from "@/lib/live/engine";
 import { STEM_SUBJECTS } from "@/lib/subjects";
 import { ActionForm, ConfirmButton } from "@/components/live/ActionForm";
+import { PilotResults } from "@/components/live/PilotResults";
 import {
   createUser, deleteTeamMember, deleteTerm, endSession, resetPassword, saveTeamMember, saveTerm,
   setMessageStatus, setTermStatus, setUserActive, updateRequest,
@@ -18,6 +19,7 @@ export const dynamic = "force-dynamic";
 
 const TABS = [
   ["overview", "Overview"],
+  ["pilot", "Pilot results"],
   ["sessions", "Sessions"],
   ["lecturers", "Lecturer accounts"],
   ["terms", "Terminology"],
@@ -54,6 +56,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       </nav>
       <div className="mt-8">
         {tab === "overview" && <Overview />}
+        {tab === "pilot" && <PilotResults />}
         {tab === "sessions" && <Sessions />}
         {tab === "lecturers" && <Lecturers meId={user.sub} />}
         {tab === "terms" && <Terms q={sp.q} subject={sp.subject} edit={sp.edit} />}
@@ -89,6 +92,14 @@ async function Overview() {
         <Stat label="New demo requests" value={newRequests} href="/live/admin?tab=requests" />
         <Stat label="Errors in last 24 hours" value={errors24} href="/live/admin?tab=errors" warn={errors24 > 0} />
       </div>
+      <Link href="/live/admin?tab=pilot" className="card flex flex-wrap items-center justify-between gap-4 p-6 hover:border-cyan-400">
+        <div>
+          <p className="eyebrow">Pilot results</p>
+          <p className="mt-1 text-lg font-bold">Pilot 2 · Maasai Mara University · 29 July – 13 August 2026</p>
+          <p className="text-sm text-slate-600">40 students · 2 lecturers · 5 Biology 101 sessions · 82% acceptable translations · 2.8 s average delay</p>
+        </div>
+        <span className="btn-primary btn-sm">View evaluation results →</span>
+      </Link>
       <div className="grid gap-4 lg:grid-cols-2">
         <section className="card p-6">
           <h2 className="font-bold">Service configuration</h2>
