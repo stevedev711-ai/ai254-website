@@ -85,6 +85,7 @@ export default function HomePage() {
               <p className="mt-5 leading-relaxed text-navy-100">
                 AI254 has completed two early-stage classroom pilots at {pilotFacts.institution} involving {pilotFacts.subject} students and lecturers. The pilots examined translation accuracy, student experience, comprehension, participation, confidence and technical performance.
               </p>
+              <a href="/pilot-results" className="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-cyan-300 hover:text-cyan-200">See the Pilot 2 results <span aria-hidden>→</span></a>
               <p className="mt-4 text-sm leading-relaxed text-navy-200">
                 These were early-stage pilots used to test and improve the system. They are not a formal institutional endorsement, and we do not report examination or learning-outcome gains from them.
               </p>

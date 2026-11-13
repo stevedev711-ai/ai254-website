@@ -9,6 +9,8 @@ const quickLinks = [
   { href: "/what-we-do", label: "What We Do" },
   { href: "/our-technology", label: "Our Technology" },
   { href: "/request-a-demo", label: "Request a Demo" },
+  { href: "/pilot-results", label: "Pilot Results" },
+  { href: "/glossary", label: "Science Glossary" },
   { href: "/live", label: "AI254 LIVE" },
   { href: "/contact", label: "Contact" },
 ];

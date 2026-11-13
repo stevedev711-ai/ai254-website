@@ -114,7 +114,10 @@ export default function WhatWeDoPage() {
                 </div>
               ))}
             </div>
-            <p className="text-sm text-slate-500">Examples are for illustration. Approved terms come from the reviewed AI254 Biology glossary.</p>
+            <p className="text-sm text-slate-500">
+              Examples are for illustration. Approved terms come from the reviewed AI254 Biology glossary.{" "}
+              <a href="/glossary" className="font-semibold text-cyan-300 underline underline-offset-4">Browse the science glossary</a>.
+            </p>
           </Block>
 
           <Block id="classroom" n="04" title="Classroom technology">

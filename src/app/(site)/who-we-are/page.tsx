@@ -84,7 +84,8 @@ export default async function WhoWeArePage() {
               AI254 has completed two early-stage classroom pilots at {pilotFacts.institution} with {pilotFacts.subject} students and lecturers. Across {pilotFacts.lectureSessions} lecture sessions there were {pilotFacts.participations} student participations ({pilotFacts.pilot1} in Pilot 1 and {pilotFacts.pilot2} in Pilot 2). Some students took part in both pilots, so this figure is not a count of unique individuals.
             </p>
             <p>
-              The pilots looked at translation accuracy, student experience, comprehension, participation, confidence and technical performance. Their main purpose was to find out how the system behaves in a real lecture hall and what needs to improve.
+              The pilots looked at translation accuracy, student experience, comprehension, participation, confidence and technical performance. Their main purpose was to find out how the system behaves in a real lecture hall and what needs to improve.{" "}
+              <a href="/pilot-results" className="font-semibold text-cyan-300 underline underline-offset-4">Read the Pilot 2 results</a>.
             </p>
             <div className="rounded-xl border border-slate-200 bg-surface p-5 text-[15px]">
               <p className="font-semibold text-brand-ink">What the pilots are, and what they are not</p>
