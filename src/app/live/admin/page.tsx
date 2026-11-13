@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
-import type { Prisma } from "@prisma/client";
+import type { Prisma, TermStatus } from "@prisma/client";
 import { prisma } from "@/lib/db";
 import { getCurrentUser } from "@/lib/auth";
 import { mailConfigured } from "@/lib/mail";
@@ -10,7 +10,7 @@ import { STEM_SUBJECTS } from "@/lib/subjects";
 import { ActionForm, ConfirmButton } from "@/components/live/ActionForm";
 import { PilotResults } from "@/components/live/PilotResults";
 import {
-  createUser, deleteTeamMember, deleteTerm, endSession, resetPassword, saveTeamMember, saveTerm,
+  bulkSetTermStatus, createUser, deleteTeamMember, deleteTerm, endSession, resetPassword, saveTeamMember, saveTerm,
   setMessageStatus, setTermStatus, setUserActive, updateRequest,
 } from "./actions";
 
@@ -33,7 +33,7 @@ type Tab = (typeof TABS)[number][0];
 
 const fmt = (d: Date | null | undefined) => (d ? d.toLocaleString("en-GB", { dateStyle: "medium", timeStyle: "short", timeZone: "Africa/Nairobi" }) : "—");
 
-export default async function AdminPage({ searchParams }: { searchParams: Promise<{ tab?: string; q?: string; subject?: string; edit?: string }> }) {
+export default async function AdminPage({ searchParams }: { searchParams: Promise<{ tab?: string; q?: string; subject?: string; edit?: string; topic?: string; status?: string; page?: string }> }) {
   const user = await getCurrentUser();
   if (!user || user.role !== "ADMIN") redirect("/live/login?role=admin");
   const sp = await searchParams;
@@ -59,7 +59,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
         {tab === "pilot" && <PilotResults />}
         {tab === "sessions" && <Sessions />}
         {tab === "lecturers" && <Lecturers meId={user.sub} />}
-        {tab === "terms" && <Terms q={sp.q} subject={sp.subject} edit={sp.edit} />}
+        {tab === "terms" && <Terms q={sp.q} subject={sp.subject} edit={sp.edit} topic={sp.topic} status={sp.status} page={sp.page} />}
         {tab === "requests" && <Requests />}
         {tab === "messages" && <Messages />}
         {tab === "team" && <Team edit={sp.edit} />}
@@ -239,38 +239,86 @@ async function Lecturers({ meId }: { meId: string }) {
 
 const TERM_STATUS: Record<string, string> = { SAMPLE: "Sample (demo)", DRAFT: "Draft", IN_REVIEW: "In review", REVIEWED: "Reviewed" };
 
-async function Terms({ q, subject, edit }: { q?: string; subject?: string; edit?: string }) {
+const TERMS_PER_PAGE = 100;
+
+async function Terms({ q, subject, edit, topic, status, page }: { q?: string; subject?: string; edit?: string; topic?: string; status?: string; page?: string }) {
+  const statusFilter = status && status in TERM_STATUS ? (status as TermStatus) : undefined;
   const where: Prisma.TermWhereInput = {
     ...(subject ? { subject } : {}),
+    ...(topic ? { topic } : {}),
+    ...(statusFilter ? { status: statusFilter } : {}),
     ...(q ? { OR: [{ english: { contains: q, mode: "insensitive" } }, { kiswahili: { contains: q, mode: "insensitive" } }] } : {}),
   };
-  const [terms, editing] = await Promise.all([
-    prisma.term.findMany({ where, orderBy: [{ subject: "asc" }, { english: "asc" }], take: 500 }),
+  const pageNo = Math.max(1, Number(page) || 1);
+  const [terms, total, editing, topics, statusCounts] = await Promise.all([
+    prisma.term.findMany({ where, orderBy: [{ subject: "asc" }, { topic: "asc" }, { english: "asc" }], take: TERMS_PER_PAGE, skip: (pageNo - 1) * TERMS_PER_PAGE }),
+    prisma.term.count({ where }),
     edit ? prisma.term.findUnique({ where: { id: edit } }) : null,
+    prisma.term.findMany({ where: { topic: { not: null } }, distinct: ["topic"], select: { topic: true }, orderBy: { topic: "asc" } }),
+    prisma.term.groupBy({ by: ["status"], _count: true }),
   ]);
+  const pages = Math.max(1, Math.ceil(total / TERMS_PER_PAGE));
+  const qs = (extra: Record<string, string | number | undefined>) => {
+    const u = new URLSearchParams({ tab: "terms" });
+    for (const [k, v] of Object.entries({ q, subject, topic, status, ...extra })) if (v !== undefined && v !== "") u.set(k, String(v));
+    return `/live/admin?${u}`;
+  };
+  const filterQs = new URLSearchParams(Object.entries({ q, subject, topic, status }).filter(([, v]) => v) as [string, string][]).toString();
   return (
     <div className="grid gap-8 xl:grid-cols-[1fr_400px]">
       <div>
+        <div className="mb-4 grid gap-3 sm:grid-cols-4">
+          {(["REVIEWED", "IN_REVIEW", "DRAFT", "SAMPLE"] as const).map((st) => (
+            <Link key={st} href={qs({ status: status === st ? undefined : st, page: undefined })} className={`card p-4 ${status === st ? "border-cyan-400" : "hover:border-slate-300"}`}>
+              <p className="text-xs text-slate-500">{TERM_STATUS[st]}</p>
+              <p className="text-2xl font-bold">{statusCounts.find((c) => c.status === st)?._count ?? 0}</p>
+            </Link>
+          ))}
+        </div>
+        <p className="mb-4 text-xs text-slate-500">Only <strong className="text-slate-700">Reviewed</strong> and <strong className="text-slate-700">In review</strong> terms (plus demo samples) are sent to live translation. Draft terms wait for a language specialist.</p>
         <form className="mb-4 flex flex-wrap gap-2">
           <input type="hidden" name="tab" value="terms" />
           <input name="q" defaultValue={q} placeholder="Search English or Kiswahili" className="input max-w-xs" aria-label="Search terms" />
-          <select name="subject" defaultValue={subject ?? ""} className="input max-w-[220px]" aria-label="Subject filter">
+          <select name="subject" defaultValue={subject ?? ""} className="input max-w-[200px]" aria-label="Subject filter">
             <option value="">All subjects</option>
             {STEM_SUBJECTS.flatMap((g) => g.subjects).map((s) => <option key={s}>{s}</option>)}
           </select>
+          <select name="topic" defaultValue={topic ?? ""} className="input max-w-[240px]" aria-label="Topic filter">
+            <option value="">All topics</option>
+            {topics.map((t) => t.topic && <option key={t.topic}>{t.topic}</option>)}
+          </select>
+          <select name="status" defaultValue={status ?? ""} className="input max-w-[170px]" aria-label="Status filter">
+            <option value="">All statuses</option>
+            {Object.entries(TERM_STATUS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+          </select>
           <button className="btn-outline btn-sm">Filter</button>
+          <a href={`/api/admin/terms/export${filterQs ? `?${filterQs}` : ""}`} className="btn-outline btn-sm">Download CSV</a>
         </form>
-        <Table head={["English", "Kiswahili", "Subject", "Definitions", "Status", ""]}>
+        <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-xl bg-slate-50 p-3 text-sm">
+          <span>
+            <strong>{total}</strong> term{total === 1 ? "" : "s"} match{total === 1 ? "es" : ""}
+            {pages > 1 && ` · page ${pageNo} of ${pages}`}
+          </span>
+          <form action={bulkSetTermStatus} className="flex flex-wrap items-center gap-2">
+            {Object.entries({ q, subject, topic, status }).map(([k, v]) => v && <input key={k} type="hidden" name={k} value={v} />)}
+            <span className="text-xs text-slate-500">Set all {total} matching terms to</span>
+            <select name="to" className="input py-1.5 text-xs" aria-label="New status for all matching terms" defaultValue="IN_REVIEW">
+              {Object.entries(TERM_STATUS).filter(([k]) => k !== "SAMPLE").map(([k, l]) => <option key={k} value={k}>{l}</option>)}
+            </select>
+            <ConfirmButton label="Apply" confirm={`Change the status of all ${total} matching terms?`} className="btn-primary btn-sm" />
+          </form>
+        </div>
+        <Table head={["English", "Kiswahili", "Subject / topic", "Definitions", "Status", ""]}>
           {terms.map((t) => (
             <tr key={t.id} className="align-top">
               <td className="px-4 py-3 font-semibold">{t.english}</td>
               <td className="px-4 py-3 font-semibold text-cyan-200" lang="sw">{t.kiswahili}</td>
-              <td className="px-4 py-3">{t.subject}</td>
+              <td className="px-4 py-3">{t.subject}{t.topic && <p className="text-xs text-slate-500">{t.topic}</p>}</td>
               <td className="max-w-sm px-4 py-3 text-xs text-slate-600"><p lang="sw">{t.definitionSw}</p>{t.usageNote && <p className="mt-1 text-amber-200">{t.usageNote}</p>}</td>
               <td className="px-4 py-3">
                 <form action={setTermStatus} className="flex gap-1">
                   <input type="hidden" name="id" value={t.id} />
-                  <select name="status" defaultValue={t.status} className="input py-1.5 text-xs" aria-label={`Status of ${t.english}`}>
+                  <select name="status" defaultValue={t.status} className="input min-w-[120px] py-1.5 text-xs" aria-label={`Status of ${t.english}`}>
                     {Object.entries(TERM_STATUS).map(([k, l]) => <option key={k} value={k}>{l}</option>)}
                   </select>
                   <button className="btn-outline btn-sm">Set</button>
@@ -286,6 +334,13 @@ async function Terms({ q, subject, edit }: { q?: string; subject?: string; edit?
             </tr>
           ))}
         </Table>
+        {pages > 1 && (
+          <nav aria-label="Term pages" className="mt-4 flex items-center justify-between text-sm">
+            {pageNo > 1 ? <Link href={qs({ page: pageNo - 1 })} className="btn-outline btn-sm">← Previous</Link> : <span />}
+            <span className="text-slate-500">Page {pageNo} of {pages}</span>
+            {pageNo < pages ? <Link href={qs({ page: pageNo + 1 })} className="btn-outline btn-sm">Next →</Link> : <span />}
+          </nav>
+        )}
       </div>
       <section className="card h-fit p-6">
         <h2 className="font-bold">{editing ? `Edit “${editing.english}”` : "Add a term"}</h2>
@@ -294,6 +349,7 @@ async function Terms({ q, subject, edit }: { q?: string; subject?: string; edit?
           <select name="subject" defaultValue={editing?.subject ?? "Biology"} className="input" aria-label="Subject">
             {STEM_SUBJECTS.map((g) => <optgroup key={g.group} label={g.group}>{g.subjects.map((s) => <option key={s}>{s}</option>)}</optgroup>)}
           </select>
+          <input name="topic" defaultValue={editing?.topic ?? ""} placeholder="Topic (e.g. Genetics)" className="input" aria-label="Topic" />
           <input name="english" defaultValue={editing?.english} required placeholder="English term" className="input" aria-label="English term" />
           <input name="kiswahili" defaultValue={editing?.kiswahili} required placeholder="Kiswahili term" className="input" aria-label="Kiswahili term" lang="sw" />
           <textarea name="definitionEn" defaultValue={editing?.definitionEn ?? ""} rows={2} placeholder="Definition (English)" className="input" aria-label="Definition in English" />

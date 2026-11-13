@@ -1,7 +1,7 @@
 import { prisma } from "@/lib/db";
 import { fail, json } from "@/lib/api";
 import { loadOwnedSession } from "@/lib/live/access";
-import { liveServicesConfigured, matchTerms, transcribe, translate } from "@/lib/live/services";
+import { glossarySubjects, liveServicesConfigured, matchTerms, transcribe, translate } from "@/lib/live/services";
 import { systemLog } from "@/lib/log";
 
 export const runtime = "nodejs";
@@ -26,7 +26,7 @@ export async function POST(req: Request, { params }: { params: Promise<{ id: str
   if (audio.byteLength === 0) return json({ ok: true, skipped: true });
   if (audio.byteLength > MAX_BYTES) return fail(413, "Audio chunk too large");
 
-  const glossary = (await prisma.term.findMany({ where: { subject: session.subject, status: { in: ["REVIEWED", "IN_REVIEW", "SAMPLE"] } }, select: { id: true, english: true, kiswahili: true } })).map((t) => ({ id: t.id, en: t.english, sw: t.kiswahili }));
+  const glossary = (await prisma.term.findMany({ where: { subject: { in: glossarySubjects(session.subject) }, status: { in: ["REVIEWED", "IN_REVIEW", "SAMPLE"] } }, select: { id: true, english: true, kiswahili: true } })).map((t) => ({ id: t.id, en: t.english, sw: t.kiswahili }));
 
   let english = "";
   let asrMs: number | undefined;

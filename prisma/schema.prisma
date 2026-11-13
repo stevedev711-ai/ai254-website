@@ -217,12 +217,14 @@ model Term {
   definitionEn String?
   definitionSw String?
   usageNote    String?
+  topic        String? // e.g. "Cell biology", "Genetics"
   status       TermStatus @default(DRAFT)
   reviewedBy   String?
   createdAt    DateTime   @default(now())
   updatedAt    DateTime   @updatedAt
 
   @@unique([subject, english])
+  @@index([subject, topic])
 }
 
 enum LogLevel {

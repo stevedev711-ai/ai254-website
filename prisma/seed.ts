@@ -8,6 +8,7 @@
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { BIOLOGY_TERMS, DEMO_SCRIPTS } from "../src/lib/live/demo-content";
+import { SCIENCE_GLOSSARY } from "../src/lib/glossary/science-glossary";
 
 const prisma = new PrismaClient();
 
@@ -44,6 +45,22 @@ async function main() {
     });
   }
   console.log(`Upserted ${BIOLOGY_TERMS.length} sample Biology terms`);
+
+  // Science glossary: add entries that are not in the database yet (case-insensitive on the
+  // English term within a subject). Existing entries, including admin edits, are never changed.
+  const existing = await prisma.term.findMany({ select: { subject: true, english: true } });
+  const key = (subject: string, english: string) => `${subject}|${english.toLowerCase().replace(/\s*\(.*?\)\s*/g, " ").trim()}`;
+  const have = new Set(existing.map((t) => key(t.subject, t.english)));
+  const toAdd = SCIENCE_GLOSSARY.filter((t) => !have.has(key(t.subject, t.english))).map((t) => ({
+    subject: t.subject,
+    topic: t.topic,
+    english: t.english.charAt(0).toUpperCase() + t.english.slice(1),
+    kiswahili: t.kiswahili,
+    usageNote: t.usageNote,
+    status: "DRAFT" as const,
+  }));
+  if (toAdd.length) await prisma.term.createMany({ data: toAdd, skipDuplicates: true });
+  console.log(`Science glossary: ${toAdd.length} new terms added (${SCIENCE_GLOSSARY.length} in source)`);
 
   const codes: Record<string, string> = { "bio101-cell": "BIO101", "gsc304-method": "GSC304", "phy202-duality": "PHY202", "csc404-complexity": "CSC404", "mat306-limits": "MAT306" };
   for (const s of DEMO_SCRIPTS) {

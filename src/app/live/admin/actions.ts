@@ -76,6 +76,7 @@ const termSchema = z.object({
   usageNote: z.string().max(1000).optional(),
   status: z.enum(["DRAFT", "IN_REVIEW", "REVIEWED", "SAMPLE"]),
   reviewedBy: z.string().max(160).optional(),
+  topic: z.string().max(120).optional(),
 });
 
 export async function saveTerm(_: ActionResult | null, fd: FormData): Promise<ActionResult> {
@@ -89,6 +90,7 @@ export async function saveTerm(_: ActionResult | null, fd: FormData): Promise<Ac
     usageNote: str(fd, "usageNote") || undefined,
     status: str(fd, "status") || "DRAFT",
     reviewedBy: str(fd, "reviewedBy") || undefined,
+    topic: str(fd, "topic") || undefined,
   });
   if (!parsed.success) return failed(parsed.error.issues[0].message);
   const id = str(fd, "id");
@@ -106,6 +108,25 @@ export async function saveTerm(_: ActionResult | null, fd: FormData): Promise<Ac
 export async function setTermStatus(fd: FormData) {
   await admin();
   await prisma.term.update({ where: { id: str(fd, "id") }, data: { status: str(fd, "status") as TermStatus } });
+  revalidatePath("/live/admin");
+}
+
+/** Change the review status of every term matching the current admin filters. */
+export async function bulkSetTermStatus(fd: FormData) {
+  const me = await admin();
+  const to = str(fd, "to") as TermStatus;
+  if (!["DRAFT", "IN_REVIEW", "REVIEWED"].includes(to)) return;
+  const q = str(fd, "q"), subject = str(fd, "subject"), topic = str(fd, "topic"), status = str(fd, "status");
+  const res = await prisma.term.updateMany({
+    where: {
+      ...(subject ? { subject } : {}),
+      ...(topic ? { topic } : {}),
+      ...(status ? { status: status as TermStatus } : {}),
+      ...(q ? { OR: [{ english: { contains: q, mode: "insensitive" as const } }, { kiswahili: { contains: q, mode: "insensitive" as const } }] } : {}),
+    },
+    data: { status: to },
+  });
+  await systemLog("INFO", "terminology", `Bulk status change: ${res.count} terms set to ${to}`, { by: me.email, filters: { q, subject, topic, status } });
   revalidatePath("/live/admin");
 }
 

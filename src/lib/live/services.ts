@@ -83,3 +83,18 @@ export function matchTerms(english: string, glossary: GlossaryEntry[]) {
     })
     .map((g) => g.id);
 }
+
+/**
+ * Glossary subjects used for a lecture subject: the subject itself, plus the shared
+ * Biology / Chemistry / Physics glossaries for related subjects, plus General Science.
+ */
+const RELATED: Record<string, string[]> = {
+  Biology: ["Biochemistry", "Microbiology", "Botany", "Zoology", "Genetics", "Ecology", "Anatomy & Physiology", "Medicine", "Nursing", "Pharmacy", "Public Health", "Agriculture", "Food Science", "Environmental Science"],
+  Chemistry: ["Organic Chemistry", "Biochemistry", "Pharmacy", "Chemical Engineering", "Food Science", "Environmental Science"],
+  Physics: ["Quantum Physics", "Astronomy", "Electrical Engineering", "Mechanical Engineering", "Earth Science / Geology"],
+};
+export function glossarySubjects(subject: string) {
+  const out = new Set([subject, "General Science"]);
+  for (const [shared, related] of Object.entries(RELATED)) if (related.includes(subject)) out.add(shared);
+  return [...out];
+}
