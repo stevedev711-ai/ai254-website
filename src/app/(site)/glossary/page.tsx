@@ -33,7 +33,7 @@ export default async function GlossaryPage() {
         intro="The terms AI254 uses to keep scientific meaning consistent when lectures are translated into Kiswahili. Search by English or Kiswahili, or browse by subject and topic."
       >
         <div className="mt-6 max-w-2xl rounded-xl border border-cyan-400/40 bg-cyan-400/10 p-4 text-sm leading-relaxed text-cyan-100">
-          <strong>Developed with AI254&apos;s Kiswahili language specialists.</strong> Every term shows its review status. <em>Reviewed</em> terms have been approved by our specialists; <em>Draft</em> terms are being reviewed and may change.
+          <strong>Developed with AI254’s Kiswahili language specialists.</strong> Every term shows its review status. <em>Reviewed</em> terms have been approved by our specialists; <em>Draft</em> terms are being reviewed and may change.
         </div>
       </PageHeader>
       <div className="container-x py-12">
