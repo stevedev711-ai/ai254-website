@@ -9,6 +9,17 @@ export const site = {
     "AI254 develops real-time Kiswahili lecture support technology for university education, beginning with scientific and technical subjects.",
 };
 
+/**
+ * Official AI254 social media accounts. An icon appears in the footer only when its
+ * URL is filled in, so no link points to an account that does not exist.
+ */
+export const social: { network: "facebook" | "x" | "instagram" | "tiktok"; label: string; url: string }[] = [
+  { network: "facebook", label: "Facebook", url: "https://www.facebook.com/share/1LavsAoK6Y/" },
+  { network: "x", label: "X", url: "" },
+  { network: "instagram", label: "Instagram", url: "" },
+  { network: "tiktok", label: "TikTok", url: "" },
+];
+
 export const nav = [
   { href: "/", label: "Home" },
   { href: "/who-we-are", label: "Who We Are" },

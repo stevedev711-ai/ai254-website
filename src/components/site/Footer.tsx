@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Logo } from "../Logo";
 import { site } from "@/lib/site";
+import { SocialLinks } from "./SocialLinks";
 
 const quickLinks = [
   { href: "/", label: "Home" },
@@ -19,6 +20,7 @@ export function Footer() {
         <div className="md:col-span-5">
           <Logo />
           <p className="mt-4 max-w-sm text-sm leading-relaxed text-slate-600">{site.description}</p>
+          <SocialLinks />
         </div>
         <nav aria-label="Footer" className="md:col-span-3">
           <h2 className="text-sm font-semibold text-brand-ink">Quick Links</h2>
