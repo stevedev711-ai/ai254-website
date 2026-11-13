@@ -25,7 +25,6 @@ async function getTerms(): Promise<PublicTerm[]> {
 
 export default async function GlossaryPage() {
   const terms = await getTerms();
-  const reviewed = terms.filter((t) => t.status === "REVIEWED").length;
   return (
     <>
       <PageHeader
@@ -33,8 +32,8 @@ export default async function GlossaryPage() {
         title="English–Kiswahili scientific terminology"
         intro="The terms AI254 uses to keep scientific meaning consistent when lectures are translated into Kiswahili. Search by English or Kiswahili, or browse by subject and topic."
       >
-        <div className="mt-6 max-w-2xl rounded-xl border border-amber-400/30 bg-amber-400/10 p-4 text-sm leading-relaxed text-amber-200">
-          <strong>Review in progress.</strong> Every term shows its status. <em>Reviewed</em> terms have been approved by AI254&apos;s Kiswahili language specialists ({reviewed} of {terms.length} so far). <em>Draft</em> terms are an initial compilation awaiting specialist review and may change.
+        <div className="mt-6 max-w-2xl rounded-xl border border-cyan-400/40 bg-cyan-400/10 p-4 text-sm leading-relaxed text-cyan-100">
+          <strong>Developed with AI254&apos;s Kiswahili language specialists.</strong> Every term shows its review status. <em>Reviewed</em> terms have been approved by our specialists; <em>Draft</em> terms are being reviewed and may change.
         </div>
       </PageHeader>
       <div className="container-x py-12">
