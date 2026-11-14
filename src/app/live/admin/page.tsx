@@ -11,7 +11,7 @@ import { ActionForm, ConfirmButton } from "@/components/live/ActionForm";
 import { PilotResults } from "@/components/live/PilotResults";
 import { PilotRecord } from "@/components/live/PilotRecord";
 import {
-  bulkSetTermStatus, createUser, deleteTeamMember, deleteTerm, endSession, resetPassword, saveTeamMember, saveTerm,
+  bulkSetTermStatus, createSetupLink, createUser, deleteTeamMember, setStaffCode, deleteTerm, endSession, resetPassword, saveTeamMember, saveTerm,
   setMessageStatus, setTermStatus, setUserActive, updateRequest,
 } from "./actions";
 
@@ -173,6 +173,7 @@ async function Sessions() {
           <td className="whitespace-nowrap px-4 py-3 text-xs">{fmt(s.startedAt)}</td>
           <td className="px-4 py-3">
             <div className="flex gap-2">
+              <Link href={`/live/admin/sessions/${s.id}`} className="btn-primary btn-sm">Log</Link>
               <Link href={`/live/lecturer/${s.id}`} className="btn-outline btn-sm">Monitor</Link>
               {s.status !== "ENDED" && (
                 <form action={endSession}><input type="hidden" name="id" value={s.id} /><ConfirmButton label="End" confirm="End this session for all students?" className="btn-sm btn border border-red-400/40 text-red-300" /></form>
@@ -191,14 +192,20 @@ async function Lecturers({ meId }: { meId: string }) {
   const users = await prisma.user.findMany({ orderBy: [{ role: "asc" }, { name: "asc" }], include: { _count: { select: { sessions: true } } } });
   return (
     <div className="grid gap-8 xl:grid-cols-[1fr_380px]">
-      <Table head={["Name", "Email", "Role", "Sessions", "Last sign-in", "Status", ""]}>
+      <Table head={["Name", "Email", "Staff code", "Role", "Sessions", "Last sign-in", "Status", ""]}>
         {users.map((u) => (
           <tr key={u.id} className="align-top">
             <td className="px-4 py-3 font-semibold">{u.name}<p className="text-xs font-normal text-slate-500">{u.department}</p></td>
             <td className="px-4 py-3">{u.email}</td>
+            <td className="px-4 py-3">
+              <ActionForm action={setStaffCode} submitLabel="Save" className="flex flex-wrap items-center gap-1 [&>div]:mt-0">
+                <input type="hidden" name="id" value={u.id} />
+                <input name="staffCode" defaultValue={u.staffCode ?? ""} placeholder="e.g. MMU/…" className="input w-36 py-1.5 font-mono text-xs" aria-label={`Staff code for ${u.name}`} />
+              </ActionForm>
+            </td>
             <td className="px-4 py-3">{u.role === "ADMIN" ? "Administrator" : "Lecturer"}</td>
             <td className="px-4 py-3">{u._count.sessions}</td>
-            <td className="whitespace-nowrap px-4 py-3 text-xs">{fmt(u.lastLoginAt)}</td>
+            <td className="whitespace-nowrap px-4 py-3 text-xs">{u.lastLoginAt ? fmt(u.lastLoginAt) : <span className="text-amber-200">Not signed in yet</span>}</td>
             <td className="px-4 py-3">{u.active ? <span className="status-op">Active</span> : <span className="badge bg-slate-100 text-slate-600">Inactive</span>}</td>
             <td className="px-4 py-3">
               {u.id !== meId && (
@@ -208,6 +215,13 @@ async function Lecturers({ meId }: { meId: string }) {
                     <input type="hidden" name="active" value={String(!u.active)} />
                     <button className="btn-outline btn-sm w-full">{u.active ? "Deactivate" : "Activate"}</button>
                   </form>
+                  <details>
+                    <summary className="cursor-pointer text-xs font-semibold text-cyan-300">Set-up link</summary>
+                    <p className="mt-2 max-w-[220px] text-xs text-slate-500">A one-time link (valid 7 days) for them to choose their own password.</p>
+                    <ActionForm action={createSetupLink} submitLabel="Create link" className="mt-2 max-w-[260px] break-all text-xs">
+                      <input type="hidden" name="id" value={u.id} />
+                    </ActionForm>
+                  </details>
                   <details>
                     <summary className="cursor-pointer text-xs font-semibold text-cyan-300">Reset password</summary>
                     <ActionForm action={resetPassword} submitLabel="Set password" className="mt-2" resetOnSuccess>
@@ -227,11 +241,13 @@ async function Lecturers({ meId }: { meId: string }) {
           <input name="name" required placeholder="Full name" className="input" aria-label="Full name" />
           <input name="email" type="email" required placeholder="Email" className="input" aria-label="Email" />
           <input name="department" placeholder="Department (optional)" className="input" aria-label="Department" />
+          <input name="staffCode" placeholder="Staff code (optional)" className="input font-mono" aria-label="Staff code" />
           <select name="role" className="input" aria-label="Role" defaultValue="LECTURER">
             <option value="LECTURER">Lecturer</option>
             <option value="ADMIN">Administrator</option>
           </select>
-          <input name="password" type="password" required minLength={12} placeholder="Temporary password (12+ characters)" className="input" aria-label="Temporary password" autoComplete="new-password" />
+          <input name="password" type="password" minLength={12} placeholder="Temporary password (optional)" className="input" aria-label="Temporary password" autoComplete="new-password" />
+          <p className="text-xs text-slate-500">Leave the password empty to get a one-time set-up link instead, so the person chooses their own password.</p>
         </ActionForm>
       </section>
     </div>

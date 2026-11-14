@@ -1,6 +1,7 @@
 "use server";
 
 import bcrypt from "bcryptjs";
+import { createHash, randomBytes } from "crypto";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
 import type { RequestStatus, TermStatus } from "@prisma/client";
@@ -33,16 +34,56 @@ export async function createUser(_: ActionResult | null, fd: FormData): Promise<
       name: z.string().min(2, "Name is required").max(120),
       email: z.string().email("Valid email required").toLowerCase(),
       department: z.string().max(120).optional(),
+      staffCode: z.string().max(60).optional(),
       role: z.enum(["LECTURER", "ADMIN"]),
-      password: z.string().min(12, "Temporary password must be at least 12 characters").max(200),
+      password: z.union([z.literal(""), z.string().min(12, "Temporary password must be at least 12 characters").max(200)]),
     })
-    .safeParse({ name: str(fd, "name"), email: str(fd, "email"), department: str(fd, "department") || undefined, role: str(fd, "role") || "LECTURER", password: String(fd.get("password") ?? "") });
+    .safeParse({
+      name: str(fd, "name"),
+      email: str(fd, "email"),
+      department: str(fd, "department") || undefined,
+      staffCode: str(fd, "staffCode") || undefined,
+      role: str(fd, "role") || "LECTURER",
+      password: String(fd.get("password") ?? ""),
+    });
   if (!parsed.success) return failed(parsed.error.issues[0].message);
   const d = parsed.data;
   if (await prisma.user.findUnique({ where: { email: d.email } })) return failed("An account with this email already exists.");
-  await prisma.user.create({ data: { name: d.name, email: d.email, department: d.department, role: d.role, passwordHash: await bcrypt.hash(d.password, 12) } });
+  // No password given: the account gets an unusable random password and a set-up link instead.
+  const passwordHash = await bcrypt.hash(d.password || randomBytes(32).toString("hex"), 12);
+  const user = await prisma.user.create({ data: { name: d.name, email: d.email, department: d.department, staffCode: d.staffCode, role: d.role, passwordHash } });
   await systemLog("INFO", "admin", `Account created for ${d.email} (${d.role})`, { by: me.email });
-  return done(`Account created for ${d.email}. Share the temporary password securely.`);
+  if (d.password) return done(`Account created for ${d.email}. Share the temporary password securely.`);
+  const link = await issueSetupLink(user.id);
+  return done(`Account created for ${d.email}. Send them this one-time set-up link (valid 7 days): ${link}`);
+}
+
+async function issueSetupLink(userId: string) {
+  const token = randomBytes(24).toString("base64url");
+  await prisma.user.update({
+    where: { id: userId },
+    data: { setupTokenHash: createHash("sha256").update(token).digest("hex"), setupTokenExpires: new Date(Date.now() + 7 * 86400_000) },
+  });
+  const base = (process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000").replace(/\/$/, "");
+  return `${base}/live/setup?token=${token}`;
+}
+
+/** Creates a new one-time set-up link so the person can choose their own password. */
+export async function createSetupLink(_: ActionResult | null, fd: FormData): Promise<ActionResult> {
+  const me = await admin();
+  const id = str(fd, "id");
+  const user = await prisma.user.findUnique({ where: { id } });
+  if (!user) return failed("Account not found.");
+  const link = await issueSetupLink(id);
+  await systemLog("INFO", "admin", `Set-up link issued for ${user.email}`, { by: me.email });
+  return done(`Send this one-time link to ${user.email} (valid 7 days): ${link}`);
+}
+
+export async function setStaffCode(_: ActionResult | null, fd: FormData): Promise<ActionResult> {
+  await admin();
+  const code = str(fd, "staffCode").slice(0, 60);
+  await prisma.user.update({ where: { id: str(fd, "id") }, data: { staffCode: code || null } });
+  return done(code ? "Staff code saved." : "Staff code removed.");
 }
 
 export async function setUserActive(fd: FormData) {

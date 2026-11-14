@@ -27,7 +27,11 @@ model User {
   passwordHash String
   role         Role      @default(LECTURER)
   department   String?
+  staffCode    String? // institution staff / lecturer code, e.g. as issued by the university
   active       Boolean   @default(true)
+  /// One-time account set-up link (SHA-256 of the token) and its expiry
+  setupTokenHash    String?   @unique
+  setupTokenExpires DateTime?
   lastLoginAt  DateTime?
   createdAt    DateTime  @default(now())
   updatedAt    DateTime  @updatedAt

@@ -7,6 +7,7 @@
  */
 import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { randomBytes } from "crypto";
 import { BIOLOGY_TERMS, DEMO_SCRIPTS } from "../src/lib/live/demo-content";
 import { SCIENCE_GLOSSARY } from "../src/lib/glossary/science-glossary";
 
@@ -26,6 +27,22 @@ async function main() {
     }
   } else {
     console.log("SEED_ADMIN_EMAIL / SEED_ADMIN_PASSWORD not set — skipping administrator creation");
+  }
+
+  // Lecturer accounts from SEED_LECTURERS ("Name|email|department;Name|email|department").
+  // Created without a usable password; an administrator issues each a one-time set-up link.
+  for (const entry of (process.env.SEED_LECTURERS ?? "").split(";").map((x) => x.trim()).filter(Boolean)) {
+    const [name, rawEmail, department] = entry.split("|").map((x) => x?.trim());
+    const email = rawEmail?.toLowerCase();
+    if (!name || !email || !email.includes("@")) {
+      console.log(`Skipping invalid SEED_LECTURERS entry: ${entry}`);
+      continue;
+    }
+    if (await prisma.user.findUnique({ where: { email } })) continue;
+    await prisma.user.create({
+      data: { name, email, department: department || null, role: "LECTURER", passwordHash: await bcrypt.hash(randomBytes(32).toString("hex"), 12) },
+    });
+    console.log(`Created lecturer account for ${name} (set-up link to be issued in admin)`);
   }
 
   for (const t of BIOLOGY_TERMS) {

@@ -36,5 +36,9 @@ export async function PATCH(req: Request, { params }: { params: Promise<{ id: st
   }
   const updated = await prisma.lectureSession.update({ where: { id }, data });
   if (action) await systemLog("INFO", "session", `Session ${session.code} ${action}`, { mode: session.mode }, id);
+  if (!action && typeof rest.micEnabled === "boolean" && rest.micEnabled !== session.micEnabled)
+    await systemLog("INFO", "session", `Session ${session.code} ${rest.micEnabled ? "mic-on" : "mic-off"}`, undefined, id);
+  if (typeof rest.studentMicEnabled === "boolean" && rest.studentMicEnabled !== session.studentMicEnabled)
+    await systemLog("INFO", "session", `Session ${session.code} ${rest.studentMicEnabled ? "student-mic-on" : "student-mic-off"}`, undefined, id);
   return json({ ok: true, session: updated });
 }
