@@ -9,6 +9,7 @@ import { CONNECTED_WINDOW_MS } from "@/lib/live/engine";
 import { STEM_SUBJECTS } from "@/lib/subjects";
 import { ActionForm, ConfirmButton } from "@/components/live/ActionForm";
 import { PilotResults } from "@/components/live/PilotResults";
+import { PilotRecord } from "@/components/live/PilotRecord";
 import {
   bulkSetTermStatus, createUser, deleteTeamMember, deleteTerm, endSession, resetPassword, saveTeamMember, saveTerm,
   setMessageStatus, setTermStatus, setUserActive, updateRequest,
@@ -19,6 +20,7 @@ export const dynamic = "force-dynamic";
 
 const TABS = [
   ["overview", "Overview"],
+  ["record", "Pilot 2 record"],
   ["pilot", "Pilot results"],
   ["sessions", "Sessions"],
   ["lecturers", "Lecturer accounts"],
@@ -41,13 +43,13 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
 
   return (
     <main className="mx-auto max-w-[1400px] px-4 py-8 sm:px-6">
-      <div className="flex flex-wrap items-end justify-between gap-4">
+      <div className="flex flex-wrap items-end justify-between gap-4 print:hidden">
         <div>
           <p className="eyebrow">Administrator</p>
           <h1 className="mt-1 text-3xl font-bold">AI254 LIVE administration</h1>
         </div>
       </div>
-      <nav aria-label="Administration sections" className="mt-6 flex gap-1 overflow-x-auto border-b border-slate-200">
+      <nav aria-label="Administration sections" className="mt-6 flex print:hidden gap-1 overflow-x-auto border-b border-slate-200">
         {TABS.map(([k, l]) => (
           <Link key={k} href={`/live/admin?tab=${k}`} aria-current={tab === k ? "page" : undefined} className={`whitespace-nowrap border-b-2 px-4 py-3 text-sm font-medium ${tab === k ? "border-navy-500 text-cyan-300" : "border-transparent text-slate-600 hover:text-brand-ink"}`}>
             {l}
@@ -56,6 +58,7 @@ export default async function AdminPage({ searchParams }: { searchParams: Promis
       </nav>
       <div className="mt-8">
         {tab === "overview" && <Overview />}
+        {tab === "record" && <PilotRecord />}
         {tab === "pilot" && <PilotResults />}
         {tab === "sessions" && <Sessions />}
         {tab === "lecturers" && <Lecturers meId={user.sub} />}

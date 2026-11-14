@@ -19,6 +19,8 @@ export const PILOT2 = {
   periodNote: "Continuous two-week classroom pilot; evaluation completed August 2026.",
   source: "AI254 Pilot 2 evaluation report, August 2026",
   respondents: 40,
+  /** Named with their consent (confirmed by AI254). */
+  lecturers: ["Mr. Paul Kariuki", "Dr. Onyango Walter"],
 
   summary:
     "The evaluation examined how real-time English-to-Swahili lecture support performed in an actual Biology 101 classroom and assessed its effect on comprehension, participation and confidence. It also assessed the updated Swahili Biology glossary integrated after Pilot 1. Results showed improvements in several areas, while translation quality for some technical terms and longer explanations, and delay during rapid speech, remain to be addressed before wider deployment.",
@@ -130,7 +132,7 @@ export const PILOT2 = {
     ],
   },
 
-  lecturers: {
+  lecturerFeedback: {
     value: [
       "Students could access Swahili explanations without the lecturer repeating every point",
       "Students could check scientific terminology while the lecture continued",

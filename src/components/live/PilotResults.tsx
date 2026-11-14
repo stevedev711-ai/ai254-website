@@ -78,9 +78,9 @@ export function PilotResults() {
         </Section>
 
         <Section title="11. Lecturer feedback" sub="Interviews with both lecturers">
-          <List title="Where lecturers saw value" items={p.lecturers.value} tone="good" />
-          <List title="Lecturer concerns" items={p.lecturers.concerns} tone="bad" />
-          <p className="mt-3 text-sm text-slate-600">{p.lecturers.suggestion}</p>
+          <List title="Where lecturers saw value" items={p.lecturerFeedback.value} tone="good" />
+          <List title="Lecturer concerns" items={p.lecturerFeedback.concerns} tone="bad" />
+          <p className="mt-3 text-sm text-slate-600">{p.lecturerFeedback.suggestion}</p>
         </Section>
 
         <Section title="Evaluation objectives and method" sub="Mixed-method evaluation">

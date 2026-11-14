@@ -42,3 +42,13 @@
 }
 
 @keyframes grow { from { width: 0; } to { width: 100%; } }
+
+/* Printing the Pilot 2 record (and other .print-light pages) as a clean light document */
+@media print {
+  html { color-scheme: light !important; }
+  html, body, #main, .bg-page, .bg-surface, main { background: #fff !important; color: #111 !important; }
+  .min-h-screen { min-height: 0 !important; }
+  .print-light, .print-light * { color: #111 !important; background: transparent !important; border-color: #d0d7e2 !important; box-shadow: none !important; }
+  .print-light .eyebrow { color: #264AA0 !important; }
+  .print-light .card { border: 1px solid #d0d7e2 !important; }
+}
