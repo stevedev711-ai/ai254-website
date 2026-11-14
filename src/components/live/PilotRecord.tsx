@@ -155,7 +155,7 @@ export function PilotRecord() {
       </Section>
 
       <footer className="border-t border-slate-200 pt-4 text-xs text-slate-500">
-        Source: {p.source}. Prepared by AI254 · info@ai254.net · +254 705 771 360
+        Prepared by AI254 · info@ai254.net · +254 705 771 360
       </footer>
     </article>
   );
