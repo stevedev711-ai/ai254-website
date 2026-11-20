@@ -46,7 +46,6 @@ export default function KslPage() {
           </SectionHeading>
           <div className="mt-8 flex flex-wrap gap-3">
             <a className="btn-cyan" href={APK_URL}>Download the Android app (APK)</a>
-            <a className="btn-outline" href={SOURCE_URL}>Source code on GitHub</a>
           </div>
           <p className="mt-3 text-sm text-slate-500">Test build for Android 13 or newer phones with a 64-bit ARM processor.</p>
 
