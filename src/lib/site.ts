@@ -25,7 +25,6 @@ export const nav = [
   { href: "/who-we-are", label: "Who We Are" },
   { href: "/what-we-do", label: "What We Do" },
   { href: "/our-technology", label: "Our Technology" },
-  { href: "/ksl", label: "KSL" },
   { href: "/request-a-demo", label: "Request a Demo" },
   { href: "/contact", label: "Contact Us" },
 ];

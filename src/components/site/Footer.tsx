@@ -8,7 +8,6 @@ const quickLinks = [
   { href: "/who-we-are", label: "Who We Are" },
   { href: "/what-we-do", label: "What We Do" },
   { href: "/our-technology", label: "Our Technology" },
-  { href: "/ksl", label: "Kenyan Sign Language (KSL)" },
   { href: "/request-a-demo", label: "Request a Demo" },
   { href: "/pilot-results", label: "Pilot Results" },
   { href: "/glossary", label: "Science Glossary" },
