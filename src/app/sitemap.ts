@@ -9,6 +9,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     ["/our-technology", 0.9],
     ["/request-a-demo", 0.9],
     ["/contact", 0.7],
+    ["/ksl", 0.6],
     ["/pilot-results", 0.8],
     ["/glossary", 0.7],
     ["/live", 0.6],
